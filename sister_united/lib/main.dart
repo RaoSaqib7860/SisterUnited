@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:sister_united/AppStyle.dart/Sthemes.dart';
+import 'package:sister_united/Authentication/Login.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
@@ -30,15 +24,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -46,68 +31,146 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+  @override
+  void initState() {
+    Future.delayed(Duration(seconds: 4), () {
+      Get.to(Login());
     });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+    var height = Get.height;
+    var width = Get.width;
+
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Stheemes.pinck,
+        body: Stack(
+          children: [
+            Container(
+              child: CustomPaint(
+                size: Size(width, height),
+                painter: RPSCustomPainter(),
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                margin: EdgeInsets.only(top: height / 7),
+                height: height / 3,
+                width: width / 1.5,
+                child: Column(
+                  children: [
+                    Container(
+                      height: height / 10,
+                      width: width / 5,
+                      child: Image.asset(
+                        'assets/girl.png',
+                        fit: BoxFit.fill,
+                        color: Stheemes.skyblue,
+                      ),
+                    ),
+                    SizedBox(
+                      height: height / 40,
+                    ),
+                    Text(
+                      'SISTERS UNITED',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black38,
+                          letterSpacing: 3,
+                          fontSize: 15),
+                    )
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                ),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black12,
+                          offset: Offset(1, 1),
+                          blurRadius: 5)
+                    ]),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: height / 1.8, right: width / 20),
+              width: width,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'Welcome,',
+                    style: TextStyle(
+                        fontSize: 55,
+                        fontWeight: FontWeight.w400,
+                        letterSpacing: 2),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: width / 12),
+                    child: Text(
+                      'Beautiful!',
+                      style: TextStyle(
+                          fontSize: 35,
+                          fontWeight: FontWeight.w400,
+                          letterSpacing: 2),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+}
+
+class RPSCustomPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint_0 = new Paint()
+      ..color = Stheemes.yellow
+      ..style = PaintingStyle.fill
+      ..strokeWidth = 1;
+
+    Path path_0 = Path();
+    path_0.moveTo(size.width, 0);
+    path_0.quadraticBezierTo(size.width * 0.5115771, size.height * 0.0604235,
+        size.width * 0.4695341, size.height * 0.2364706);
+    path_0.cubicTo(
+        size.width * 0.5491398,
+        size.height * 0.3716824,
+        size.width * 0.3758423,
+        size.height * 0.3281059,
+        size.width * 0.4516129,
+        size.height * 0.4105882);
+    path_0.cubicTo(
+        size.width * 0.5212903,
+        size.height * 0.4540000,
+        size.width * 0.5806093,
+        size.height * 0.5231294,
+        size.width * 0.4551971,
+        size.height * 0.5941176);
+    path_0.cubicTo(
+        size.width * 0.3328315,
+        size.height * 0.6861765,
+        size.width * 0.6309319,
+        size.height * 0.6880824,
+        size.width * 0.6230108,
+        size.height * 0.7612471);
+    path_0.quadraticBezierTo(size.width * 0.5288889, size.height * 0.9118824,
+        size.width, size.height * 0.9929412);
+    canvas.drawPath(path_0, paint_0);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }
