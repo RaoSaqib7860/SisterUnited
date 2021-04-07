@@ -37,7 +37,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               alignment: Alignment.bottomCenter,
               child: Container(
                 alignment: Alignment.bottomLeft,
-                child: FadeInUp(
+                child: FadeInUpBig(
                   child: CustomPaint(
                     size: Size(width, height / 3),
                     painter: ForgotPainter2(),

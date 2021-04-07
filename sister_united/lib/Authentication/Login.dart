@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/Authentication/ForgotPassword.dart';
 import 'package:sister_united/Authentication/SignUp.dart';
+import 'package:sister_united/HomePage.dart';
 
 class Login extends StatefulWidget {
   Login({Key key}) : super(key: key);
@@ -154,7 +155,7 @@ class _LoginState extends State<Login> {
                           Padding(
                             padding: EdgeInsets.only(left: width / 15),
                             child: InkWell(
-                              onTap: (){
+                              onTap: () {
                                 Get.to(ForgotPassword());
                               },
                               child: Text(
@@ -168,23 +169,28 @@ class _LoginState extends State<Login> {
                           SizedBox(
                             height: height / 40,
                           ),
-                          Row(
-                            children: [
-                              Text(
-                                'Login',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    letterSpacing: 2,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Container(
-                                height: height / 30,
-                                width: width / 5,
-                                child: Image.asset('assets/arrow.png'),
-                              )
-                            ],
-                            mainAxisAlignment: MainAxisAlignment.end,
+                          InkWell(
+                            onTap: () {
+                              Get.to(HomePage());
+                            },
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Login',
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      letterSpacing: 2,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Container(
+                                  height: height / 30,
+                                  width: width / 5,
+                                  child: Image.asset('assets/arrow.png'),
+                                )
+                              ],
+                              mainAxisAlignment: MainAxisAlignment.end,
+                            ),
                           ),
                           SizedBox(
                             height: height / 15,
