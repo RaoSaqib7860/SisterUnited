@@ -2,6 +2,9 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
+import 'package:sister_united/ProfilePage.dart';
+import 'package:sister_united/SelfLove.dart';
+import 'package:sister_united/Sms/MainSms.dart';
 import 'Authentication/Login.dart';
 
 class HomePage extends StatefulWidget {
@@ -38,10 +41,15 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Row(
                           children: [
-                            Icon(
-                              Icons.person,
-                              color: Stheemes.darkPinck,
-                              size: 30,
+                            InkWell(
+                              onTap: () {
+                                Get.to(ProfilePage());
+                              },
+                              child: Icon(
+                                Icons.person,
+                                color: Stheemes.darkPinck,
+                                size: 35,
+                              ),
                             ),
                             SizedBox(
                               width: width / 30,
@@ -68,19 +76,24 @@ class _HomePageState extends State<HomePage> {
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
-                              Container(
-                                height: height / 16,
-                                width: width / 8,
-                                child: Center(
-                                  child: Icon(
-                                    Icons.sms,
-                                    color: Colors.white,
-                                    size: 25,
+                              InkWell(
+                                onTap: () {
+                                  Get.to(MainSmsPage());
+                                },
+                                child: Container(
+                                  height: height / 16,
+                                  width: width / 8,
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.sms,
+                                      color: Colors.white,
+                                      size: 25,
+                                    ),
                                   ),
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Stheemes.darkPinck),
                                 ),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Stheemes.darkPinck),
                               )
                             ],
                           ),
@@ -143,34 +156,41 @@ class _HomePageState extends State<HomePage> {
                       Pulse(
                         child: Stack(
                           children: [
-                            Container(
-                              height: height / 6,
-                              width: width / 3,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'BEAUTY',
-                                    style: TextStyle(
-                                        fontSize: 23,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  RotationTransition(
-                                    turns: new AlwaysStoppedAnimation(-0.03),
-                                    child: Text(
-                                      'Central',
+                            InkWell(
+                              onTap: () {
+                                Get.to(SelfLove(
+                                  text: 'Self Love',
+                                ));
+                              },
+                              child: Container(
+                                height: height / 6,
+                                width: width / 3,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'BEAUTY',
                                       style: TextStyle(
-                                          fontSize: 18,
-                                          letterSpacing: 1,
-                                          fontWeight: FontWeight.w300),
+                                          fontSize: 23,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                  ),
-                                ],
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                                    RotationTransition(
+                                      turns: new AlwaysStoppedAnimation(-0.03),
+                                      child: Text(
+                                        'Central',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            letterSpacing: 1,
+                                            fontWeight: FontWeight.w300),
+                                      ),
+                                    ),
+                                  ],
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                ),
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Stheemes.yellow),
                               ),
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Stheemes.yellow),
                             ),
                             Container(
                               height: height / 20,
@@ -187,34 +207,41 @@ class _HomePageState extends State<HomePage> {
                         delay: Duration(seconds: 1),
                         child: Stack(
                           children: [
-                            Container(
-                              height: height / 6,
-                              width: width / 3,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'GET',
-                                    style: TextStyle(
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  RotationTransition(
-                                    turns: new AlwaysStoppedAnimation(-0.03),
-                                    child: Text(
-                                      'Creati',
+                            InkWell(
+                              onTap: () {
+                                Get.to(SelfLove(
+                                  text: 'Dance',
+                                ));
+                              },
+                              child: Container(
+                                height: height / 6,
+                                width: width / 3,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'GET',
                                       style: TextStyle(
-                                          fontSize: 23,
-                                          letterSpacing: 1,
-                                          fontWeight: FontWeight.w300),
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                  ),
-                                ],
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                                    RotationTransition(
+                                      turns: new AlwaysStoppedAnimation(-0.03),
+                                      child: Text(
+                                        'Creati',
+                                        style: TextStyle(
+                                            fontSize: 23,
+                                            letterSpacing: 1,
+                                            fontWeight: FontWeight.w300),
+                                      ),
+                                    ),
+                                  ],
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                ),
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Stheemes.skyblue),
                               ),
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Stheemes.skyblue),
                             ),
                             Container(
                               height: height / 20,
@@ -253,34 +280,41 @@ class _HomePageState extends State<HomePage> {
                         delay: Duration(seconds: 1),
                         child: Stack(
                           children: [
-                            Container(
-                              height: height / 6,
-                              width: width / 3,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'BETTER',
-                                    style: TextStyle(
-                                        fontSize: 23,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  RotationTransition(
-                                    turns: new AlwaysStoppedAnimation(-0.03),
-                                    child: Text(
-                                      'You',
+                            InkWell(
+                              onTap: () {
+                                Get.to(SelfLove(
+                                  text: 'Health',
+                                ));
+                              },
+                              child: Container(
+                                height: height / 6,
+                                width: width / 3,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'BETTER',
                                       style: TextStyle(
-                                          fontSize: 18,
-                                          letterSpacing: 1,
-                                          fontWeight: FontWeight.w300),
+                                          fontSize: 23,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                  ),
-                                ],
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                                    RotationTransition(
+                                      turns: new AlwaysStoppedAnimation(-0.03),
+                                      child: Text(
+                                        'You',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            letterSpacing: 1,
+                                            fontWeight: FontWeight.w300),
+                                      ),
+                                    ),
+                                  ],
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                ),
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Stheemes.pinck),
                               ),
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Stheemes.pinck),
                             ),
                             Container(
                               height: height / 20,
@@ -296,34 +330,41 @@ class _HomePageState extends State<HomePage> {
                       Pulse(
                         child: Stack(
                           children: [
-                            Container(
-                              height: height / 6,
-                              width: width / 3,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'WELLBEING',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  RotationTransition(
-                                    turns: new AlwaysStoppedAnimation(-0.03),
-                                    child: Text(
-                                      'Library',
+                            InkWell(
+                              onTap: () {
+                                Get.to(SelfLove(
+                                  text: 'Health',
+                                ));
+                              },
+                              child: Container(
+                                height: height / 6,
+                                width: width / 3,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'WELLBEING',
                                       style: TextStyle(
-                                          fontSize: 18,
-                                          letterSpacing: 1,
-                                          fontWeight: FontWeight.w300),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                  ),
-                                ],
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                                    RotationTransition(
+                                      turns: new AlwaysStoppedAnimation(-0.03),
+                                      child: Text(
+                                        'Library',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            letterSpacing: 1,
+                                            fontWeight: FontWeight.w300),
+                                      ),
+                                    ),
+                                  ],
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                ),
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Stheemes.darkPinck),
                               ),
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Stheemes.darkPinck),
                             ),
                             Container(
                               height: height / 20,
@@ -368,7 +409,11 @@ class _HomePageState extends State<HomePage> {
                           height: height / 10,
                           width: width / 5,
                           child: Center(
-                              child: Image.asset('assets/homeDairy.png')),
+                              child: Icon(
+                            Icons.book_outlined,
+                            color: Colors.black,
+                            size: 45,
+                          )),
                           margin: EdgeInsets.only(left: width / 10),
                           decoration: BoxDecoration(
                               color: Stheemes.darkPinck,
@@ -380,7 +425,10 @@ class _HomePageState extends State<HomePage> {
                             height: height / 10,
                             width: width / 5,
                             child: Center(
-                                child: Image.asset('assets/HomeHeart.png')),
+                                child: Icon(
+                              Icons.favorite_border,
+                              size: 50,
+                            )),
                           ),
                         )
                       ],
