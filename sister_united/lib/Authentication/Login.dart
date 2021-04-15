@@ -5,6 +5,7 @@ import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/Authentication/ForgotPassword.dart';
 import 'package:sister_united/Authentication/SignUp.dart';
 import 'package:sister_united/HomePage.dart';
+import 'package:sister_united/TermsAndCondition.dart';
 
 class Login extends StatefulWidget {
   Login({Key key}) : super(key: key);
@@ -69,47 +70,52 @@ class _LoginState extends State<Login> {
                       width: width,
                       child: ListView(
                         children: [
-                          Container(
-                            margin: EdgeInsets.only(top: height / 6.5),
-                            height: height / 3.2,
-                            width: width / 1.6,
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: height / 10,
-                                  width: width / 5,
-                                  child: Image.asset(
-                                    'assets/girl.png',
-                                    fit: BoxFit.fill,
-                                    color: Stheemes.skyblue,
+                          InkWell(
+                            onTap: () {
+                              Get.to(TermsAndCondition());
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(top: height / 6.5),
+                              height: height / 3.2,
+                              width: width / 1.6,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: height / 10,
+                                    width: width / 5,
+                                    child: Image.asset(
+                                      'assets/girl.png',
+                                      fit: BoxFit.fill,
+                                      color: Stheemes.skyblue,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: height / 40,
-                                ),
-                                Center(
-                                  child: Text(
-                                    'SISTERS UNITED',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black38,
-                                        letterSpacing: 3,
-                                        fontSize: 15),
+                                  SizedBox(
+                                    height: height / 40,
                                   ),
-                                )
-                              ],
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                                  Center(
+                                    child: Text(
+                                      'SISTERS UNITED',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black38,
+                                          letterSpacing: 3,
+                                          fontSize: 15),
+                                    ),
+                                  )
+                                ],
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                              ),
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black12,
+                                        offset: Offset(1, 1),
+                                        blurRadius: 5)
+                                  ]),
                             ),
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black12,
-                                      offset: Offset(1, 1),
-                                      blurRadius: 5)
-                                ]),
                           ),
                           SizedBox(
                             height: height / 60,
