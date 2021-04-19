@@ -1,8 +1,12 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:sister_united/ApiUtils/AuthUtils.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/Authentication/Login.dart';
+import 'package:sister_united/Providers/AuthProviders/SignUpProvider.dart';
 
 class SignUp extends StatefulWidget {
   SignUp({Key key}) : super(key: key);
@@ -14,10 +18,13 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
+    final _provider = Provider.of<SignUpProvider>(context);
     var height = Get.height;
     var width = Get.width;
+
     return SafeArea(
       child: Scaffold(
+        key: _provider.scaffoldkey,
         backgroundColor: Stheemes.pinck,
         body: Stack(
           children: [
@@ -127,84 +134,141 @@ class _SignUpState extends State<SignUp> {
                     height: height / 20,
                   ),
                   TextFromFieldss(
+                      controller: _provider.fnameController,
                       color: Colors.white,
-                      hint: 'Full Name'.tr,
+                      hint: 'Fist Name'.tr,
                       icon: Icons.person,
-                      uperhint: 'Full Name'.tr,
+                      uperhint: 'Last Name'.tr,
                       obsucreTextUp: false),
                   SizedBox(
-                    height: height / 50,
+                    height: height / 70,
                   ),
                   TextFromFieldss(
+                      controller: _provider.lnameController,
                       color: Colors.white,
-                      hint: 'DOB'.tr,
+                      hint: 'Last Name'.tr,
                       icon: Icons.person,
-                      uperhint: 'DOB'.tr,
+                      uperhint: 'Last Name'.tr,
                       obsucreTextUp: false),
                   SizedBox(
-                    height: height / 50,
+                    height: height / 70,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      DatePicker.showDatePicker(context,
+                          showTitleActions: true,
+                          minTime: DateTime.now(),
+                          theme: DatePickerTheme(
+                              headerColor: Stheemes.darkPinck,
+                              backgroundColor: Colors.white,
+                              itemStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14),
+                              doneStyle:
+                                  TextStyle(color: Colors.white, fontSize: 16)),
+                          onChanged: (date) {
+                        print('change $date in time zone ' +
+                            date.timeZoneOffset.inHours.toString());
+                      }, onConfirm: (date) {
+                        print('confirm ${date.timeZoneName}');
+                        print('confirm ${date.toIso8601String()}');
+                        print('confirm ${date.toUtc()}');
+                        String sDate = date.toString().split(' ')[0].toString();
+                        print(
+                            '$sDate${date.timeZoneName}${date.toUtc().toString().split(' ')[1].toString()}');
+                        _provider.dobController.text =
+                            '$sDate${date.timeZoneName}${date.toUtc().toString().split(' ')[1].toString()}';
+                      }, currentTime: DateTime.now(), locale: LocaleType.en);
+                    },
+                    child: TextFromFieldss(
+                        controller: _provider.dobController,
+                        enable: false,
+                        color: Colors.white,
+                        hint: 'DOB'.tr,
+                        icon: Icons.person,
+                        uperhint: 'DOB'.tr,
+                        obsucreTextUp: false),
+                  ),
+                  SizedBox(
+                    height: height / 70,
                   ),
                   TextFromFieldss(
+                      controller: _provider.emailController,
                       color: Colors.white,
                       hint: 'Email'.tr,
                       icon: Icons.person,
                       uperhint: 'Email'.tr,
                       obsucreTextUp: false),
                   SizedBox(
-                    height: height / 50,
+                    height: height / 70,
                   ),
                   TextFromFieldss(
+                      controller: _provider.addressController,
                       color: Colors.white,
                       hint: 'Address'.tr,
                       icon: Icons.person,
                       uperhint: 'Address'.tr,
                       obsucreTextUp: false),
                   SizedBox(
-                    height: height / 50,
+                    height: height / 70,
                   ),
                   TextFromFieldss(
+                      isnumber: true,
+                      controller: _provider.mobController,
                       color: Colors.white,
                       hint: 'Mobile  Number'.tr,
                       icon: Icons.person,
                       uperhint: 'Mobile  Number'.tr,
                       obsucreTextUp: false),
                   SizedBox(
-                    height: height / 50,
+                    height: height / 70,
                   ),
                   TextFromFieldss(
+                      controller: _provider.nationController,
                       color: Colors.white,
                       hint: 'Nationality'.tr,
                       icon: Icons.person,
                       uperhint: 'Nationality'.tr,
                       obsucreTextUp: false),
                   SizedBox(
-                    height: height / 50,
+                    height: height / 70,
                   ),
                   TextFromFieldss(
+                      controller: _provider.passwordController,
                       color: Colors.white,
-                      hint: 'Location'.tr,
+                      hint: 'Password'.tr,
                       icon: Icons.person,
-                      uperhint: 'Location'.tr,
+                      uperhint: 'Password'.tr,
                       obsucreTextUp: false),
+                  SizedBox(
+                    height: height / 30,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      print('object');
+                      AuthUtils.signUpAPi(provider: _provider);
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          'JOIN THE SISTERHOOD',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold),
+                        ),
+                        Container(
+                          height: height / 30,
+                          width: width / 5,
+                          child: Image.asset('assets/arrow.png'),
+                        )
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.center,
+                    ),
+                  ),
                   SizedBox(
                     height: height / 20,
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        'JOIN THE SISTERHOOD',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                        height: height / 30,
-                        width: width / 5,
-                        child: Image.asset('assets/arrow.png'),
-                      )
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.center,
-                  )
                 ],
               ),
             ),

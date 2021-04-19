@@ -1,10 +1,14 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:sister_united/ApiUtils/AuthUtils.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/Authentication/ForgotPassword.dart';
 import 'package:sister_united/Authentication/SignUp.dart';
 import 'package:sister_united/HomePage.dart';
+import 'package:sister_united/Providers/AuthProviders/LoginProvider.dart';
+import 'package:sister_united/Providers/AuthProviders/SignUpProvider.dart';
 import 'package:sister_united/TermsAndCondition.dart';
 
 class Login extends StatefulWidget {
@@ -19,7 +23,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     var height = Get.height;
     var width = Get.width;
-
+    final _provider = Provider.of<LoginProvider>(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Stheemes.pinck,
@@ -136,6 +140,7 @@ class _LoginState extends State<Login> {
                             margin: EdgeInsets.only(
                                 left: Get.width / 20, right: Get.width / 20),
                             child: TextFromFieldss(
+                                controller: _provider.emailController,
                                 color: Colors.white,
                                 hint: 'Email'.tr,
                                 icon: Icons.person,
@@ -149,6 +154,7 @@ class _LoginState extends State<Login> {
                             margin: EdgeInsets.only(
                                 left: Get.width / 20, right: Get.width / 20),
                             child: TextFromFieldss(
+                                controller: _provider.passwordController,
                                 color: Colors.white,
                                 hint: 'Password'.tr,
                                 icon: Icons.person,
@@ -177,6 +183,7 @@ class _LoginState extends State<Login> {
                           ),
                           InkWell(
                             onTap: () {
+                              // AuthUtils.loginApi(provider: _provider);
                               Get.to(HomePage());
                             },
                             child: Row(
@@ -214,7 +221,10 @@ class _LoginState extends State<Login> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  Get.to(SignUp());
+                                  Get.to(ChangeNotifierProvider(
+                                    child: SignUp(),
+                                    create: (_) => SignUpProvider(),
+                                  ));
                                 },
                                 child: Text(
                                   'Sign up',

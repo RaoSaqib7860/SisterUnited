@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/Authentication/Login.dart';
+import 'package:sister_united/Providers/AuthProviders/LoginProvider.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,7 +36,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     Future.delayed(Duration(seconds: 4), () {
-      Get.to(Login());
+      Get.to(ChangeNotifierProvider(
+        child: Login(),
+        create: (_) => LoginProvider(),
+      ));
     });
     super.initState();
   }
