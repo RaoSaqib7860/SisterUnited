@@ -1,8 +1,11 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:sister_united/ApiUtils/AllApiUtils.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/ProfilePage.dart';
+import 'package:sister_united/Providers/AllProviders/HomePageProvider.dart';
 import 'package:sister_united/SelfLove.dart';
 import 'package:sister_united/Sms/MainSms.dart';
 import 'Authentication/Login.dart';
@@ -16,7 +19,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    final _provider = Provider.of<HomePageProvider>(context, listen: false);
+    AllApiUtils.apigetAllCategory(provider: _provider);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final _provider = Provider.of<HomePageProvider>(context);
     var height = Get.height;
     var width = Get.width;
 

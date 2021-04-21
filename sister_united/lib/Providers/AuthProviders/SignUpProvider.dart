@@ -27,4 +27,11 @@ class SignUpProvider extends ChangeNotifier {
 
   TextEditingController _addressController = TextEditingController();
   TextEditingController get addressController => _addressController;
+
+  bool _loading = false;
+  bool get loading => _loading;
+  setloading(bool v) {
+    _loading = v;
+    notifyListeners();
+  }
 }

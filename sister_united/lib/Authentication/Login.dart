@@ -7,6 +7,7 @@ import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/Authentication/ForgotPassword.dart';
 import 'package:sister_united/Authentication/SignUp.dart';
 import 'package:sister_united/HomePage.dart';
+import 'package:sister_united/Providers/AuthProviders/ForgotPasswordProvider.dart';
 import 'package:sister_united/Providers/AuthProviders/LoginProvider.dart';
 import 'package:sister_united/Providers/AuthProviders/SignUpProvider.dart';
 import 'package:sister_united/TermsAndCondition.dart';
@@ -168,7 +169,10 @@ class _LoginState extends State<Login> {
                             padding: EdgeInsets.only(left: width / 15),
                             child: InkWell(
                               onTap: () {
-                                Get.to(ForgotPassword());
+                                Get.to(ChangeNotifierProvider(
+                                  child: ForgotPassword(),
+                                  create: (_) => ForgotpasswordProvider(),
+                                ));
                               },
                               child: Text(
                                 'Forgot your password?',
@@ -183,8 +187,18 @@ class _LoginState extends State<Login> {
                           ),
                           InkWell(
                             onTap: () {
-                              // AuthUtils.loginApi(provider: _provider);
-                              Get.to(HomePage());
+                              if (_provider.emailController.text.isNotEmpty) {
+                                if (_provider
+                                    .passwordController.text.isNotEmpty) {
+                                  _provider.setloading(true);
+                                  AuthUtils.loginApi(provider: _provider);
+                                } else {
+                                  Get.snackbar(
+                                      'Error', 'Please enter password');
+                                }
+                              } else {
+                                Get.snackbar('Error', 'Please enter email');
+                              }
                             },
                             child: Row(
                               children: [
@@ -260,6 +274,19 @@ class _LoginState extends State<Login> {
                   ],
                 ),
               ),
+              _provider.loading == true
+                  ? InkWell(
+                      onTap: () {
+                        _provider.setloading(false);
+                      },
+                      child: Container(
+                        height: height,
+                        width: width,
+                        decoration:
+                            BoxDecoration(color: Colors.black.withOpacity(0.5)),
+                      ),
+                    )
+                  : SizedBox()
             ],
           ),
         ),

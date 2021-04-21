@@ -29,7 +29,7 @@ class _SignUpState extends State<SignUp> {
         body: Stack(
           children: [
             Align(
-              alignment: Alignment.bottomCenter,
+              alignment: FractionalOffset.bottomCenter,
               child: Container(
                 alignment: Alignment.bottomLeft,
                 child: FadeInLeftBig(
@@ -157,7 +157,7 @@ class _SignUpState extends State<SignUp> {
                     onTap: () {
                       DatePicker.showDatePicker(context,
                           showTitleActions: true,
-                          minTime: DateTime.now(),
+                          minTime: DateTime(1940),
                           theme: DatePickerTheme(
                               headerColor: Stheemes.darkPinck,
                               backgroundColor: Colors.white,
@@ -171,14 +171,16 @@ class _SignUpState extends State<SignUp> {
                         print('change $date in time zone ' +
                             date.timeZoneOffset.inHours.toString());
                       }, onConfirm: (date) {
+                        DateTime dt = DateTime.now();
+
                         print('confirm ${date.timeZoneName}');
                         print('confirm ${date.toIso8601String()}');
-                        print('confirm ${date.toUtc()}');
+                        print('confirm ${dt.toUtc()}');
                         String sDate = date.toString().split(' ')[0].toString();
                         print(
-                            '$sDate${date.timeZoneName}${date.toUtc().toString().split(' ')[1].toString()}');
+                            '${sDate}T${dt.toUtc().toString().split(' ')[1].toString()}');
                         _provider.dobController.text =
-                            '$sDate${date.timeZoneName}${date.toUtc().toString().split(' ')[1].toString()}';
+                            '${sDate}T${dt.toUtc().toString().split(' ')[1].toString()}';
                       }, currentTime: DateTime.now(), locale: LocaleType.en);
                     },
                     child: TextFromFieldss(
@@ -246,8 +248,45 @@ class _SignUpState extends State<SignUp> {
                   ),
                   InkWell(
                     onTap: () {
-                      print('object');
-                      AuthUtils.signUpAPi(provider: _provider);
+                      if (_provider.fnameController.text.isNotEmpty) {
+                        if (_provider.lnameController.text.isNotEmpty) {
+                          if (_provider.dobController.text.isNotEmpty) {
+                            if (_provider.emailController.text.isNotEmpty) {
+                              if (_provider.addressController.text.isNotEmpty) {
+                                if (_provider.mobController.text.isNotEmpty) {
+                                  if (_provider
+                                      .nationController.text.isNotEmpty) {
+                                    if (_provider
+                                        .passwordController.text.isNotEmpty) {
+                                      _provider.setloading(true);
+                                      AuthUtils.signUpAPi(provider: _provider);
+                                    } else {
+                                      Get.snackbar(
+                                          'Error', 'Please enter password');
+                                    }
+                                  } else {
+                                    Get.snackbar(
+                                        'Error', 'Please enter nation');
+                                  }
+                                } else {
+                                  Get.snackbar(
+                                      'Error', 'Please enter phone number');
+                                }
+                              } else {
+                                Get.snackbar('Error', 'Please enter adress');
+                              }
+                            } else {
+                              Get.snackbar('Error', 'Please enter Email');
+                            }
+                          } else {
+                            Get.snackbar('Error', 'Please select BOB');
+                          }
+                        } else {
+                          Get.snackbar('Error', 'Please enter last name');
+                        }
+                      } else {
+                        Get.snackbar('Error', 'Please enter first name');
+                      }
                     },
                     child: Row(
                       children: [
@@ -278,9 +317,27 @@ class _SignUpState extends State<SignUp> {
                 margin: EdgeInsets.only(top: width / 15, left: width / 30),
                 height: height / 30,
                 width: width / 5,
-                child: Image.asset('assets/arrowBack.png'),
+                child: InkWell(
+                  child: Image.asset('assets/arrowBack.png'),
+                  onTap: () {
+                    Get.back();
+                  },
+                ),
               ),
-            )
+            ),
+            _provider.loading == true
+                ? InkWell(
+                    onTap: () {
+                      _provider.setloading(false);
+                    },
+                    child: Container(
+                      height: height,
+                      width: width,
+                      decoration:
+                          BoxDecoration(color: Colors.black.withOpacity(0.5)),
+                    ),
+                  )
+                : SizedBox()
           ],
         ),
       ),

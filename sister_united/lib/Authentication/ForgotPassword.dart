@@ -1,9 +1,11 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:sister_united/ApiUtils/AuthUtils.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/Authentication/PinCode.dart';
-
+import 'package:sister_united/Providers/AuthProviders/ForgotPasswordProvider.dart';
 import 'Login.dart';
 
 class ForgotPassword extends StatefulWidget {
@@ -16,6 +18,7 @@ class ForgotPassword extends StatefulWidget {
 class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
+    final _provider = Provider.of<ForgotpasswordProvider>(context);
     var height = Get.height;
     var width = Get.width;
     return SafeArea(
@@ -51,7 +54,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 margin: EdgeInsets.only(top: width / 15, left: width / 30),
                 height: height / 30,
                 width: width / 5,
-                child: Image.asset('assets/arrowBack.png'),
+                child: InkWell(
+                  child: Image.asset('assets/arrowBack.png'),
+                  onTap: () {
+                    Get.back();
+                  },
+                ),
               ),
             ),
             Container(
@@ -82,7 +90,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         letterSpacing: 0),
                   ),
                   Text(
-                    'type in the email you are registered to.',
+                    'type in the ${_provider.ispassword ? 'password' : 'email'} you are registered to.',
                     style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w300,
@@ -91,22 +99,82 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   SizedBox(
                     height: height / 30,
                   ),
-                  Container(
-                    margin:
-                        EdgeInsets.only(left: width / 15, right: width / 15),
-                    child: TextFromFieldss(
-                        color: Colors.white,
-                        hint: 'Enter your email'.tr,
-                        icon: Icons.person,
-                        uperhint: 'Enter your email'.tr,
-                        obsucreTextUp: false),
-                  ),
+                  !_provider.ispassword
+                      ? Container(
+                          margin: EdgeInsets.only(
+                              left: width / 15, right: width / 15),
+                          child: TextFromFieldss(
+                              controller: _provider.emailController,
+                              color: Colors.white,
+                              hint: 'Enter your email'.tr,
+                              icon: Icons.person,
+                              uperhint: 'Enter your email'.tr,
+                              obsucreTextUp: false),
+                        )
+                      : FadeInRightBig(
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: width / 15, right: width / 15),
+                                child: TextFromFieldss(
+                                    controller: _provider.passwordController,
+                                    color: Colors.white,
+                                    hint: 'Enter password'.tr,
+                                    icon: Icons.person,
+                                    uperhint: 'Enter password'.tr,
+                                    obsucreTextUp: true),
+                              ),
+                              SizedBox(
+                                height: height / 80,
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: width / 15, right: width / 15),
+                                child: TextFromFieldss(
+                                    controller: _provider.repasswordController,
+                                    color: Colors.white,
+                                    hint: 'Re_Enter password'.tr,
+                                    icon: Icons.person,
+                                    uperhint: 'Enter password'.tr,
+                                    obsucreTextUp: true),
+                              )
+                            ],
+                          ),
+                        ),
                   SizedBox(
                     height: height / 30,
                   ),
                   InkWell(
                     onTap: () {
-                      Get.to(PinCode());
+                      if (!_provider.ispassword) {
+                        if (_provider.emailController.text.isNotEmpty) {
+                          _provider.setloading(true);
+                          AuthUtils.apiforgotPassword(provider: _provider);
+                        } else {
+                          Get.snackbar('Error', 'Please enter email',
+                              barBlur: 10.0);
+                        }
+                      } else {
+                        if (_provider.passwordController.text.isNotEmpty) {
+                          if (_provider.repasswordController.text.isNotEmpty) {
+                            if (_provider.passwordController.text ==
+                                _provider.repasswordController.text) {
+                              _provider.setloading(true);
+                              AuthUtils.apiupdatePassword(provider: _provider);
+                            } else {
+                              Get.snackbar('Error', 'Password did not match',
+                                  barBlur: 10.0);
+                            }
+                          } else {
+                            Get.snackbar('Error', 'Please re_enter password',
+                                barBlur: 10.0);
+                          }
+                        } else {
+                          Get.snackbar('Error', 'Please enter password',
+                              barBlur: 10.0);
+                        }
+                      }
                     },
                     child: Row(
                       children: [
@@ -132,7 +200,20 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   ),
                 ],
               ),
-            )
+            ),
+            _provider.loading == true
+                ? InkWell(
+                    onTap: () {
+                      _provider.setloading(false);
+                    },
+                    child: Container(
+                      height: height,
+                      width: width,
+                      decoration:
+                          BoxDecoration(color: Colors.black.withOpacity(0.5)),
+                    ),
+                  )
+                : SizedBox()
           ],
         ),
       ),
