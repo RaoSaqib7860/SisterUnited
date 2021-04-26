@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:confetti/confetti.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:sister_united/ApiUtils/SharedPreference.dart';
 import 'package:sister_united/Authentication/Login.dart';
 import 'package:sister_united/HomePage.dart';
 import 'package:sister_united/Providers/AllProviders/HomePageProvider.dart';
@@ -11,7 +13,7 @@ import 'package:sister_united/Providers/AuthProviders/LoginProvider.dart';
 import 'package:sister_united/Providers/AuthProviders/SignUpProvider.dart';
 
 class AuthUtils {
-  static String token='';
+  static String token = '';
   static const String baseUrl = 'http://135.125.212.109';
   static const String signUp = '/api/Account/UserRegistraion';
   static const String login = '/api/Authentication/login';
@@ -80,7 +82,7 @@ class AuthUtils {
     } catch (e) {}
   }
 
-  static Future loginApi({LoginProvider provider}) async {
+  static Future loginApi({LoginProvider provider,ConfettiController con}) async {
     //  var url = Uri.parse('$baseUrl$login');
     try {
       var responce = await Dio().post(
@@ -107,9 +109,12 @@ class AuthUtils {
       if (data['status'] == 'Fail') {
         Get.snackbar('Error', data['message'], barBlur: 10.0);
       } else if (data['status'] == 'Success') {
+        con.play();
         Get.snackbar('Success', data['message'], barBlur: 10.0);
-        token='${data['payload']['token']['tokenString']}';
+        token = '${data['payload']['token']['tokenString']}';
         log('token is = $token');
+        SharedPreferenceClass msmcd = SharedPreferenceClass();
+        msmcd.addToken(token);
         Future.delayed(Duration(seconds: 3), () {
           Get.to(ChangeNotifierProvider(
             child: HomePage(),

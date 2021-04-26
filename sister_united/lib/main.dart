@@ -1,9 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:sister_united/ApiUtils/AuthUtils.dart';
+import 'package:sister_united/ApiUtils/SharedPreference.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/Authentication/Login.dart';
 import 'package:sister_united/Providers/AuthProviders/LoginProvider.dart';
+import 'HomePage.dart';
+import 'Providers/AllProviders/HomePageProvider.dart';
 
 void main() {
   runApp(MyApp());
@@ -35,11 +41,25 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 4), () {
-      Get.to(ChangeNotifierProvider(
-        child: Login(),
-        create: (_) => LoginProvider(),
-      ));
+    Future.delayed(Duration(seconds: 4), () async {
+      SharedPreferenceClass msmcd = SharedPreferenceClass();
+      var token = await msmcd.getToken();
+      // if (token == null) {
+      //   Get.to(ChangeNotifierProvider(
+      //     child: Login(),
+      //     create: (_) => LoginProvider(),
+      //   ));
+      // } else {
+      //   AuthUtils.token=token;
+      //   Get.to(ChangeNotifierProvider(
+      //     child: HomePage(),
+      //     create: (_) => HomePageProvider(),
+      //   ));
+      // }
+         Get.to(ChangeNotifierProvider(
+          child: Login(),
+          create: (_) => LoginProvider(),
+        ));
     });
     super.initState();
   }

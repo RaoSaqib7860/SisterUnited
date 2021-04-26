@@ -6,6 +6,7 @@ import 'package:sister_united/ApiUtils/AllApiUtils.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/ProfilePage.dart';
 import 'package:sister_united/Providers/AllProviders/HomePageProvider.dart';
+import 'package:sister_united/Providers/AllProviders/SubCatProvider.dart';
 import 'package:sister_united/SelfLove.dart';
 import 'package:sister_united/Sms/MainSms.dart';
 import 'Authentication/Login.dart';
@@ -161,249 +162,311 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(
                     height: height / 50,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Pulse(
-                        child: Stack(
+                  _provider.listAllCat.isEmpty
+                      ? Expanded(
+                          child: Center(child: CircularProgressIndicator()))
+                      : Column(
                           children: [
-                            InkWell(
-                              onTap: () {
-                                Get.to(SelfLove(
-                                  text: 'Self Love',
-                                ));
-                              },
-                              child: Container(
-                                height: height / 6,
-                                width: width / 3,
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      'BEAUTY',
-                                      style: TextStyle(
-                                          fontSize: 23,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    RotationTransition(
-                                      turns: new AlwaysStoppedAnimation(-0.03),
-                                      child: Text(
-                                        'Central',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            letterSpacing: 1,
-                                            fontWeight: FontWeight.w300),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Pulse(
+                                  child: Stack(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          Get.to(ChangeNotifierProvider(
+                                            create: (_) => SubcatProvider(),
+                                            child: SelfLove(
+                                              text: '${_provider.listAllCat[0]['name']}',
+                                              id: '${_provider.listAllCat[0]['id']}',
+                                              subtext: '${_provider.listAllCat[0]['subHeading']}',
+                                            ),
+                                          ));
+                                        },
+                                        child: Container(
+                                          height: height / 6,
+                                          width: width / 3,
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                '${_provider.listAllCat[0]['name']}',
+                                                style: TextStyle(
+                                                    fontSize: 23,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              RotationTransition(
+                                                turns:
+                                                    new AlwaysStoppedAnimation(
+                                                        -0.03),
+                                                child: Text(
+                                                  '${_provider.listAllCat[0]['subHeading']}',
+                                                  style: TextStyle(
+                                                      fontSize: 17,
+                                                      letterSpacing: 1,
+                                                      fontWeight:
+                                                          FontWeight.w300),
+                                                ),
+                                              ),
+                                            ],
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                          ),
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Stheemes.yellow),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                      Container(
+                                        height: height / 20,
+                                        width: width / 10,
+                                        child: Image.asset('assets/taj.png'),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Stheemes.yellow),
-                              ),
+                                SizedBox(
+                                  width: width / 15,
+                                ),
+                                FadeInUp(
+                                  delay: Duration(seconds: 1),
+                                  child: Stack(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                           Get.to(ChangeNotifierProvider(
+                                            create: (_) => SubcatProvider(),
+                                            child: SelfLove(
+                                              text: '${_provider.listAllCat[1]['name']}',
+                                              id: '${_provider.listAllCat[1]['id']}',
+                                              subtext: '${_provider.listAllCat[1]['subHeading']}',
+                                            ),
+                                          ));
+                                        },
+                                        child: Container(
+                                          height: height / 6,
+                                          width: width / 3,
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                '${_provider.listAllCat[1]['name']}',
+                                                style: TextStyle(
+                                                    fontSize: 19,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              RotationTransition(
+                                                turns:
+                                                    new AlwaysStoppedAnimation(
+                                                        -0.03),
+                                                child: Text(
+                                                  '${_provider.listAllCat[1]['subHeading']}',
+                                                  style: TextStyle(
+                                                      fontSize: 23,
+                                                      letterSpacing: 1,
+                                                      fontWeight:
+                                                          FontWeight.w300),
+                                                ),
+                                              ),
+                                            ],
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                          ),
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Stheemes.skyblue),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: height / 20,
+                                        width: width / 10,
+                                        margin:
+                                            EdgeInsets.only(top: height / 100),
+                                        child: RotationTransition(
+                                          child:
+                                              Image.asset('assets/heart.png'),
+                                          turns:
+                                              new AlwaysStoppedAnimation(-0.1),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Container(
+                                          height: height / 20,
+                                          width: width / 10,
+                                          margin: EdgeInsets.only(
+                                              top: height / 12,
+                                              left: width / 4),
+                                          child: RotationTransition(
+                                            child:
+                                                Image.asset('assets/heart.png'),
+                                            turns:
+                                                new AlwaysStoppedAnimation(0.1),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
                             ),
-                            Container(
-                              height: height / 20,
-                              width: width / 10,
-                              child: Image.asset('assets/taj.png'),
+                            SizedBox(
+                              height: height / 100,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                FadeInDown(
+                                  delay: Duration(seconds: 1),
+                                  child: Stack(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          Get.to(ChangeNotifierProvider(
+                                            create: (_) => SubcatProvider(),
+                                            child: SelfLove(
+                                              text: '${_provider.listAllCat[2]['name']}',
+                                              id: '${_provider.listAllCat[2]['id']}',
+                                              subtext: '${_provider.listAllCat[2]['subHeading']}',
+                                            ),
+                                          ));
+                                        },
+                                        child: Container(
+                                          height: height / 6,
+                                          width: width / 3,
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                '${_provider.listAllCat[2]['name']}',
+                                                style: TextStyle(
+                                                    fontSize: 23,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              RotationTransition(
+                                                turns:
+                                                    new AlwaysStoppedAnimation(
+                                                        -0.03),
+                                                child: Text(
+                                                  '${_provider.listAllCat[2]['subHeading']}',
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      letterSpacing: 1,
+                                                      fontWeight:
+                                                          FontWeight.w300),
+                                                ),
+                                              ),
+                                            ],
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                          ),
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Stheemes.pinck),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: height / 20,
+                                        width: width / 10,
+                                        child: Image.asset('assets/taj.png'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: width / 15,
+                                ),
+                                Pulse(
+                                  child: Stack(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                           Get.to(ChangeNotifierProvider(
+                                            create: (_) => SubcatProvider(),
+                                            child: SelfLove(
+                                              text: '${_provider.listAllCat[3]['name']}',
+                                              id: '${_provider.listAllCat[3]['id']}',
+                                              subtext: '${_provider.listAllCat[3]['subHeading']}',
+                                            ),
+                                          ));
+                                        },
+                                        child: Container(
+                                          height: height / 6,
+                                          width: width / 3,
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                '${_provider.listAllCat[3]['name']}',
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              RotationTransition(
+                                                turns:
+                                                    new AlwaysStoppedAnimation(
+                                                        -0.03),
+                                                child: Text(
+                                                  '${_provider.listAllCat[3]['subHeading']}',
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      letterSpacing: 1,
+                                                      fontWeight:
+                                                          FontWeight.w300),
+                                                ),
+                                              ),
+                                            ],
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                          ),
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Stheemes.darkPinck),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: height / 20,
+                                        width: width / 10,
+                                        margin: EdgeInsets.only(
+                                            top: height / 100, left: width / 4),
+                                        child: RotationTransition(
+                                          child:
+                                              Image.asset('assets/heartY.png'),
+                                          turns:
+                                              new AlwaysStoppedAnimation(-0.05),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Container(
+                                          height: height / 20,
+                                          width: width / 10,
+                                          margin:
+                                              EdgeInsets.only(top: height / 10),
+                                          child: RotationTransition(
+                                            child: Image.asset(
+                                                'assets/heartY.png'),
+                                            turns: new AlwaysStoppedAnimation(
+                                                -0.2),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
                             ),
                           ],
                         ),
-                      ),
-                      SizedBox(
-                        width: width / 15,
-                      ),
-                      FadeInUp(
-                        delay: Duration(seconds: 1),
-                        child: Stack(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Get.to(SelfLove(
-                                  text: 'Dance',
-                                ));
-                              },
-                              child: Container(
-                                height: height / 6,
-                                width: width / 3,
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      'GET',
-                                      style: TextStyle(
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    RotationTransition(
-                                      turns: new AlwaysStoppedAnimation(-0.03),
-                                      child: Text(
-                                        'Creati',
-                                        style: TextStyle(
-                                            fontSize: 23,
-                                            letterSpacing: 1,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                  ],
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                ),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Stheemes.skyblue),
-                              ),
-                            ),
-                            Container(
-                              height: height / 20,
-                              width: width / 10,
-                              margin: EdgeInsets.only(top: height / 100),
-                              child: RotationTransition(
-                                child: Image.asset('assets/heart.png'),
-                                turns: new AlwaysStoppedAnimation(-0.1),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Container(
-                                height: height / 20,
-                                width: width / 10,
-                                margin: EdgeInsets.only(
-                                    top: height / 12, left: width / 4),
-                                child: RotationTransition(
-                                  child: Image.asset('assets/heart.png'),
-                                  turns: new AlwaysStoppedAnimation(0.1),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: height / 100,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FadeInDown(
-                        delay: Duration(seconds: 1),
-                        child: Stack(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Get.to(SelfLove(
-                                  text: 'Health',
-                                ));
-                              },
-                              child: Container(
-                                height: height / 6,
-                                width: width / 3,
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      'BETTER',
-                                      style: TextStyle(
-                                          fontSize: 23,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    RotationTransition(
-                                      turns: new AlwaysStoppedAnimation(-0.03),
-                                      child: Text(
-                                        'You',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            letterSpacing: 1,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                  ],
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                ),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Stheemes.pinck),
-                              ),
-                            ),
-                            Container(
-                              height: height / 20,
-                              width: width / 10,
-                              child: Image.asset('assets/taj.png'),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: width / 15,
-                      ),
-                      Pulse(
-                        child: Stack(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Get.to(SelfLove(
-                                  text: 'Health',
-                                ));
-                              },
-                              child: Container(
-                                height: height / 6,
-                                width: width / 3,
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      'WELLBEING',
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    RotationTransition(
-                                      turns: new AlwaysStoppedAnimation(-0.03),
-                                      child: Text(
-                                        'Library',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            letterSpacing: 1,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                  ],
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                ),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Stheemes.darkPinck),
-                              ),
-                            ),
-                            Container(
-                              height: height / 20,
-                              width: width / 10,
-                              margin: EdgeInsets.only(
-                                  top: height / 100, left: width / 4),
-                              child: RotationTransition(
-                                child: Image.asset('assets/heartY.png'),
-                                turns: new AlwaysStoppedAnimation(-0.05),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Container(
-                                height: height / 20,
-                                width: width / 10,
-                                margin: EdgeInsets.only(top: height / 10),
-                                child: RotationTransition(
-                                  child: Image.asset('assets/heartY.png'),
-                                  turns: new AlwaysStoppedAnimation(-0.2),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
                   Expanded(
                       child: Container(
                     child: Stack(
@@ -416,19 +479,23 @@ class _HomePageState extends State<HomePage> {
                             decoration: BoxDecoration(color: Stheemes.yellow),
                           ),
                         ),
-                        Container(
-                          height: height / 10,
-                          width: width / 5,
-                          child: Center(
-                              child: Icon(
-                            Icons.book_outlined,
-                            color: Colors.black,
-                            size: 45,
-                          )),
-                          margin: EdgeInsets.only(left: width / 10),
-                          decoration: BoxDecoration(
-                              color: Stheemes.darkPinck,
-                              shape: BoxShape.circle),
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Container(
+                            height: height / 10,
+                            width: width / 5,
+                            child: Center(
+                                child: Icon(
+                              Icons.book_outlined,
+                              color: Colors.black,
+                              size: 45,
+                            )),
+                            margin: EdgeInsets.only(
+                                left: width / 10, bottom: height / 35),
+                            decoration: BoxDecoration(
+                                color: Stheemes.darkPinck,
+                                shape: BoxShape.circle),
+                          ),
                         ),
                         Align(
                           alignment: Alignment.bottomRight,
@@ -508,6 +575,28 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
+            _provider.isAuth
+                ? Container(
+                    height: height,
+                    width: width,
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: Container(
+                            child: Center(
+                              child: Text('User is not varified'),
+                            ),
+                            decoration: BoxDecoration(color: Colors.white),
+                            height: height / 10,
+                            width: width / 2,
+                          ),
+                        )
+                      ],
+                    ),
+                    decoration:
+                        BoxDecoration(color: Colors.black.withOpacity(0.7)),
+                  )
+                : SizedBox()
           ],
         ),
       ),

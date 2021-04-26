@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,7 @@ import 'package:sister_united/Providers/AuthProviders/ForgotPasswordProvider.dar
 import 'package:sister_united/Providers/AuthProviders/LoginProvider.dart';
 import 'package:sister_united/Providers/AuthProviders/SignUpProvider.dart';
 import 'package:sister_united/TermsAndCondition.dart';
+import 'dart:math';
 
 class Login extends StatefulWidget {
   Login({Key key}) : super(key: key);
@@ -20,6 +22,46 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  ConfettiController _controllerCenterRight;
+  @override
+  void initState() {
+    _controllerCenterRight =
+        ConfettiController(duration: const Duration(seconds: 3));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controllerCenterRight.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  /// A custom Path to paint stars.
+  Path drawStar(Size size) {
+    // Method to convert degree to radians
+    double degToRad(double deg) => deg * (pi / 180.0);
+
+    const numberOfPoints = 5;
+    final halfWidth = size.width / 2;
+    final externalRadius = halfWidth;
+    final internalRadius = halfWidth / 2.5;
+    final degreesPerStep = degToRad(360 / numberOfPoints);
+    final halfDegreesPerStep = degreesPerStep / 2;
+    final path = Path();
+    final fullAngle = degToRad(360);
+    path.moveTo(size.width, halfWidth);
+
+    for (double step = 0; step < fullAngle; step += degreesPerStep) {
+      path.lineTo(halfWidth + externalRadius * cos(step),
+          halfWidth + externalRadius * sin(step));
+      path.lineTo(halfWidth + internalRadius * cos(step + halfDegreesPerStep),
+          halfWidth + internalRadius * sin(step + halfDegreesPerStep));
+    }
+    path.close();
+    return path;
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = Get.height;
@@ -190,8 +232,8 @@ class _LoginState extends State<Login> {
                               if (_provider.emailController.text.isNotEmpty) {
                                 if (_provider
                                     .passwordController.text.isNotEmpty) {
-                                  _provider.setloading(true);
-                                  AuthUtils.loginApi(provider: _provider);
+                                   _provider.setloading(true);
+                                 AuthUtils.loginApi(provider: _provider,con: _controllerCenterRight);
                                 } else {
                                   Get.snackbar(
                                       'Error', 'Please enter password');
@@ -214,7 +256,29 @@ class _LoginState extends State<Login> {
                                   height: height / 30,
                                   width: width / 5,
                                   child: Image.asset('assets/arrow.png'),
-                                )
+                                ),
+
+                                //CENTER LEFT - Emit right
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: ConfettiWidget(
+                                    confettiController: _controllerCenterRight,
+                                    blastDirection: pi, // radial value - LEFT
+                                    particleDrag:
+                                        0.05, // apply drag to the confetti
+                                    emissionFrequency:
+                                        0.05, // how often it should emit
+                                    numberOfParticles:
+                                        20, // number of particles to emit
+                                    gravity: 0.05, // gravity - or fall speed
+                                    shouldLoop: false,
+                                    colors: const [
+                                      Colors.green,
+                                      Colors.blue,
+                                      Colors.pink
+                                    ], // manually specify the colors to be used
+                                  ),
+                                ),
                               ],
                               mainAxisAlignment: MainAxisAlignment.end,
                             ),
