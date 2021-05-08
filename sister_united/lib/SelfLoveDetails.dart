@@ -1,14 +1,19 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:sister_united/AddnewPost.dart';
+import 'package:sister_united/ApiUtils/AllApiUtils.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/MessageToTeam.dart';
+import 'package:sister_united/Providers/AllProviders/AllDairyProvider.dart';
+import 'package:sister_united/Providers/AllProviders/WeightDairyProvider.dart';
 import 'package:sister_united/SelfLoverSubDetails.dart';
+import 'package:sister_united/WeightDairy.dart';
 
 class SelfLoveDetails extends StatefulWidget {
-  final String text;
-  SelfLoveDetails({Key key, this.text = ''}) : super(key: key);
+  final String fkDairyId;
+  SelfLoveDetails({Key key, this.fkDairyId = ''}) : super(key: key);
 
   @override
   _SelfLoveDetailsState createState() => _SelfLoveDetailsState();
@@ -16,11 +21,23 @@ class SelfLoveDetails extends StatefulWidget {
 
 class _SelfLoveDetailsState extends State<SelfLoveDetails> {
   List list = ['a', 'b', 'c', 'a', 'b', 'c', 'a', 'b', 'c', 'a'];
+
+  @override
+  void initState() {
+    final _provider = Provider.of<AllDairyProvider>(context, listen: false);
+    getApiData(_provider);
+    super.initState();
+  }
+
+  getApiData(AllDairyProvider provider) {
+    AllApiUtils.apigetAllDairy(provider: provider);
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = Get.height;
     var width = Get.width;
-
+    final _provider = Provider.of<AllDairyProvider>(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Stheemes.whitesolid,
@@ -160,108 +177,134 @@ class _SelfLoveDetailsState extends State<SelfLoveDetails> {
                       height: height / 40,
                     ),
                     Expanded(
-                        child: ListView.builder(
-                      itemBuilder: (c, i) {
-                        return InkWell(
-                          onTap: () {
-                            Get.to(SelfLoverSubDetails());
-                          },
-                          child: Container(
-                            height: height / 3.2,
-                            width: width,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  height: height / 150,
-                                ),
-                                ListTile(
-                                  leading: Container(
-                                    padding: EdgeInsets.all(width / 100),
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 30,
-                                    ),
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                            width: 0.5, color: Colors.black)),
-                                  ),
-                                  title: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Post Title',
-                                        style: TextStyle(fontSize: 14),
-                                      ),
-                                      Text(
-                                        'User Name',
-                                        style: TextStyle(fontSize: 10),
-                                      ),
-                                    ],
-                                  ),
-                                  trailing: Icon(Icons.more_vert_outlined),
-                                ),
-                                Expanded(
-                                    child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(35),
-                                    ),
-                                    border: Border.all(
-                                        width: 0.5, color: Colors.black),
-                                    color: Stheemes.yellow,
-                                  ),
-                                )),
-                                Container(
-                                  height: height / 20,
-                                  width: width,
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.message,
-                                        color: Stheemes.darkPinck,
-                                      ),
-                                      SizedBox(
-                                        width: width / 30,
-                                      ),
-                                      Text(
-                                        'View all 1.2k Comments',
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Stheemes.darkPinck,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                      SizedBox(
-                                        width: width / 20,
-                                      ),
-                                    ],
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Stheemes.pinck,
-                                    borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(35)),
-                                  ),
-                                )
-                              ],
-                            ),
-                            margin: EdgeInsets.only(
-                                left: width / 4.6, bottom: width / 30),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(35),
-                                    bottomLeft: Radius.circular(35)),
-                                border: Border.all(
-                                    width: 0.5, color: Colors.black)),
-                          ),
-                        );
-                      },
-                      itemCount: 10,
-                    ))
+                        child: _provider.loading == false
+                            ? Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : _provider.listOfAllDairy.isEmpty
+                                ? Center(
+                                    child: Text('Empty'),
+                                  )
+                                : ListView.builder(
+                                    itemBuilder: (c, i) {
+                                      return InkWell(
+                                        onTap: () {
+                                          Get.to(SelfLoverSubDetails());
+                                        },
+                                        child: Container(
+                                          height: height / 3.2,
+                                          width: width,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: height / 150,
+                                              ),
+                                              ListTile(
+                                                leading: Container(
+                                                  padding: EdgeInsets.all(
+                                                      width / 100),
+                                                  child: Icon(
+                                                    Icons.person,
+                                                    size: 30,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(
+                                                          width: 0.5,
+                                                          color: Colors.black)),
+                                                ),
+                                                title: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      '${_provider.listOfAllDairy[i]['title']}',
+                                                      style: TextStyle(
+                                                          fontSize: 14),
+                                                    ),
+                                                    Text(
+                                                      '- - - - - -',
+                                                      style: TextStyle(
+                                                          fontSize: 10),
+                                                    ),
+                                                  ],
+                                                ),
+                                                trailing: Icon(
+                                                    Icons.more_vert_outlined),
+                                              ),
+                                              Expanded(
+                                                  child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(35),
+                                                  ),
+                                                  border: Border.all(
+                                                      width: 0.5,
+                                                      color: Colors.black),
+                                                  color: Stheemes.yellow,
+                                                ),
+                                              )),
+                                              Container(
+                                                height: height / 20,
+                                                width: width,
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.message,
+                                                      color: Stheemes.darkPinck,
+                                                    ),
+                                                    SizedBox(
+                                                      width: width / 30,
+                                                    ),
+                                                    Text(
+                                                      'View all 1.2k Comments',
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: Stheemes
+                                                              .darkPinck,
+                                                          fontWeight:
+                                                              FontWeight.w300),
+                                                    ),
+                                                    SizedBox(
+                                                      width: width / 20,
+                                                    ),
+                                                  ],
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: Stheemes.pinck,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  35)),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          margin: EdgeInsets.only(
+                                              left: width / 4.6,
+                                              bottom: width / 30),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(35),
+                                                  bottomLeft:
+                                                      Radius.circular(35)),
+                                              border: Border.all(
+                                                  width: 0.5,
+                                                  color: Colors.black)),
+                                        ),
+                                      );
+                                    },
+                                    itemCount: _provider.listOfAllDairy.length,
+                                  ))
                   ],
                   crossAxisAlignment: CrossAxisAlignment.start,
                 ),
@@ -303,12 +346,21 @@ class _SelfLoveDetailsState extends State<SelfLoveDetails> {
                             child: Container(
                               height: height / 10,
                               width: width / 5,
-                              child: Center(
-                                  child: Icon(
-                                Icons.book_outlined,
-                                color: Colors.black,
-                                size: 45,
-                              )),
+                              child: InkWell(
+                                onTap: () {
+                                  Get.to(ChangeNotifierProvider(
+                                      create: (_) => WeightDairyProvider(),
+                                      child: WheightDairy(
+                                        fkDairyId: widget.fkDairyId,
+                                      )));
+                                },
+                                child: Center(
+                                    child: Icon(
+                                  Icons.book_outlined,
+                                  color: Colors.black,
+                                  size: 45,
+                                )),
+                              ),
                               decoration: BoxDecoration(
                                   color: Stheemes.darkPinck,
                                   shape: BoxShape.circle),

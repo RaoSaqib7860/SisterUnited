@@ -188,6 +188,7 @@ class _AddPostFieldsState extends State<AddPostFields> {
       child: Padding(
         padding: EdgeInsets.only(left: Get.width / 15, right: Get.width / 15),
         child: Container(
+          decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(8)),
           child: TextFormField(
             controller: widget.controller,
             obscureText: widget.obsucreTextUp,

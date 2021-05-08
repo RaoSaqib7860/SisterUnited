@@ -6,11 +6,15 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:provider/provider.dart';
 import 'package:sister_united/EmojiDairy.dart';
+import 'package:sister_united/Providers/AllProviders/WeightDairyProvider.dart';
+import 'AddnewPost.dart';
 import 'AppStyle.dart/Sthemes.dart';
 
 class WheightDairy extends StatefulWidget {
-  WheightDairy({Key key}) : super(key: key);
+  final String fkDairyId;
+  WheightDairy({Key key, this.fkDairyId}) : super(key: key);
 
   @override
   _WheightDairyState createState() => _WheightDairyState();
@@ -22,20 +26,24 @@ class _WheightDairyState extends State<WheightDairy> {
   List listofDateinNuber = [];
   List listofDateinAlphaBatic = [];
   List listofDateBool = [];
-  File file;
-  int currentweightinKG = 50;
-  int currentweightinML = 3;
+  List dateForUploading = [];
+
   @override
   void initState() {
-    log('${DateFormat('dd').format(dateTime)}');
-    log('${DateFormat('EE').format(dateTime)}');
-    log('${DateFormat('MMM').format(dateTime)}');
-    log('${DateFormat('yyyy').format(dateTime)}');
+    log('fkDairyId id is = ${widget.fkDairyId}');
+    // log('${DateFormat('dd').format(dateTime)}');
+    // log('${DateFormat('EE').format(dateTime)}');
+    // log('${DateFormat('MMM').format(dateTime)}');
+    // log('${DateFormat('yyyy').format(dateTime)}');
     for (var i = 0; i < 100; i++) {
       DateTime dateTime = DateTime.now().add(Duration(days: i));
       listofDateinNuber.add('${DateFormat('dd').format(dateTime)}');
       listofDateinAlphaBatic.add('${DateFormat('EE').format(dateTime)}');
       listofDateBool.add(false);
+      print(
+          '${dateTime.toString().split(' ')[0].toString()}T${dateTime.toUtc().toString().split(' ')[1].toString()}');
+      dateForUploading.add(
+          '${dateTime.toString().split(' ')[0].toString()}T${dateTime.toUtc().toString().split(' ')[1].toString()}');
     }
     log('number date is=$listofDateinNuber');
     log('number date is=$listofDateinAlphaBatic');
@@ -46,6 +54,7 @@ class _WheightDairyState extends State<WheightDairy> {
   Widget build(BuildContext context) {
     var height = Get.height;
     var width = Get.width;
+    final _provider = Provider.of<WeightDairyProvider>(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Stheemes.yellow,
@@ -65,14 +74,11 @@ class _WheightDairyState extends State<WheightDairy> {
                         onTap: () async {
                           FilePickerResult result =
                               await FilePicker.platform.pickFiles(
-                            type: FileType.custom,
-                            allowedExtensions: ['jpg', 'png'],
+                            type: FileType.image,
+                            allowMultiple: false,
                           );
-
                           if (result != null) {
-                            setState(() {
-                              file = File(result.files.single.path);
-                            });
+                            _provider.setFile(File(result.files.single.path));
                           } else {
                             // User canceled the picker
                           }
@@ -175,6 +181,8 @@ class _WheightDairyState extends State<WheightDairy> {
                                       listofDateBool[i] = false;
                                     });
                                   }
+                                  _provider
+                                      .setSelectedDate(dateForUploading[i]);
                                 },
                                 child: Container(
                                     margin: EdgeInsets.only(right: width / 30),
@@ -220,6 +228,83 @@ class _WheightDairyState extends State<WheightDairy> {
                     ),
                     decoration: BoxDecoration(color: Stheemes.pinck),
                   ),
+                  SizedBox(
+                    height: height / 100,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: width / 15),
+                    child: Text(
+                      ' Title',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ),
+                  SizedBox(
+                    height: height / 200,
+                  ),
+                  AddPostFields(
+                      controller: _provider.titleController,
+                      color: Colors.white,
+                      hint: 'Nationality'.tr,
+                      postFixIcon: Icon(
+                        Icons.flag,
+                        color: Stheemes.offGreyColor,
+                      ),
+                      obsucreTextUp: false),
+                  SizedBox(
+                    height: height / 200,
+                  ),
+                  SizedBox(
+                    height: height / 100,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: width / 15),
+                    child: Text(
+                      ' Description',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ),
+                  SizedBox(
+                    height: height / 200,
+                  ),
+                  AddPostFields(
+                      controller: _provider.descriptionController,
+                      color: Colors.white,
+                      hint: 'Nationality'.tr,
+                      line: 8,
+                      postFixIcon: Icon(
+                        Icons.flag,
+                        color: Stheemes.offGreyColor,
+                      ),
+                      obsucreTextUp: false),
+                  Container(
+                    height: height / 4,
+                    width: width,
+                    child: _provider.file != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.file(
+                              File(_provider.file.path),
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Center(
+                            child: Icon(
+                            Icons.image,
+                            size: 120,
+                            color: Stheemes.offGreyColor,
+                          )),
+                    margin: EdgeInsets.only(
+                        left: width / 15,
+                        right: width / 15,
+                        top: height / 50,
+                        bottom: height / 50),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                   Container(
                     height: height / 3,
                     width: width,
@@ -257,7 +342,7 @@ class _WheightDairyState extends State<WheightDairy> {
                                       color: Colors.black38,
                                     ),
                                     SizedBox(
-                                      width: width / 20,
+                                      width: width / 10,
                                     ),
                                     Icon(
                                       Icons.arrow_drop_up,
@@ -278,7 +363,7 @@ class _WheightDairyState extends State<WheightDairy> {
                                       color: Colors.black38,
                                     ),
                                     SizedBox(
-                                      width: width / 20,
+                                      width: width / 10,
                                     ),
                                     Icon(
                                       Icons.arrow_drop_up,
@@ -309,36 +394,35 @@ class _WheightDairyState extends State<WheightDairy> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 NumberPicker(
-                                  value: currentweightinKG,
-                                  minValue: 0,
-                                  maxValue: 100,
-                                  itemHeight: height / 20,
-                                  itemWidth: width / 6,
-                                  textStyle: TextStyle(fontSize: 0),
-                                  selectedTextStyle: TextStyle(
-                                      fontSize: 40,
-                                      fontWeight: FontWeight.bold),
-                                  onChanged: (value) => setState(() {
-                                    currentweightinKG = value;
-                                  }),
-                                ),
+                                    value: _provider.fistWieghtValue,
+                                    minValue: 0,
+                                    maxValue: 100,
+                                    itemHeight: height / 20,
+                                    itemWidth: width / 6,
+                                    textStyle: TextStyle(fontSize: 0),
+                                    selectedTextStyle: TextStyle(
+                                        fontSize: 40,
+                                        fontWeight: FontWeight.bold),
+                                    onChanged: (value) {
+                                      _provider.setfistWieghtValue(value);
+                                    }),
                                 Text(
                                   '.',
                                   style: TextStyle(fontSize: 50),
                                 ),
                                 NumberPicker(
                                   itemHeight: height / 20,
-                                  value: currentweightinML,
+                                  value: _provider.secondWieghtValue,
                                   minValue: 0,
-                                  itemWidth: width / 10,
+                                  itemWidth: width / 6,
                                   maxValue: 100,
                                   textStyle: TextStyle(fontSize: 0),
                                   selectedTextStyle: TextStyle(
                                       fontSize: 40,
                                       fontWeight: FontWeight.bold),
-                                  onChanged: (value) => setState(() {
-                                    currentweightinML = value;
-                                  }),
+                                  onChanged: (value) {
+                                    _provider.setsecondWieghtValue(value);
+                                  },
                                 ),
                               ],
                             )
@@ -354,14 +438,53 @@ class _WheightDairyState extends State<WheightDairy> {
                     padding: EdgeInsets.only(top: height / 30),
                     decoration: BoxDecoration(color: Colors.white),
                     child: DairyTextFields(
+                        controller: _provider.notesController,
                         color: Colors.white,
                         hint: 'Notes'.tr,
-                        line: 50,
+                        line: 20,
                         postFixIcon: Icon(
                           Icons.flag,
                           color: Stheemes.offGreyColor,
                         ),
                         obsucreTextUp: false),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(color: Colors.white),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: height / 30,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            if (_provider.selectedDate != '') {
+                             
+                            } else {
+                              Get.snackbar('Error', 'Please select date');
+                            }
+                          },
+                          child: Container(
+                            height: height / 27,
+                            width: width / 2,
+                            child: Center(
+                              child: Text(
+                                'Add Entry',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    letterSpacing: 0.5),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                color: Stheemes.yellow),
+                          ),
+                        ),
+                        SizedBox(
+                          height: height / 20,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -373,26 +496,6 @@ class _WheightDairyState extends State<WheightDairy> {
                 height: height / 30,
                 width: width / 5,
                 child: Image.asset('assets/arrowBack.png'),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: height / 27,
-                width: width / 2,
-                margin: EdgeInsets.only(bottom: height / 30),
-                child: Center(
-                  child: Text(
-                    'Add Entry',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        letterSpacing: 0.5),
-                  ),
-                ),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    color: Stheemes.yellow),
               ),
             ),
             Align(

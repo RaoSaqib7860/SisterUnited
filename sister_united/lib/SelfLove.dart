@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:sister_united/ApiUtils/AllApiUtils.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
+import 'package:sister_united/Providers/AllProviders/AllDairyProvider.dart';
 import 'package:sister_united/Providers/AllProviders/SubCatProvider.dart';
 import 'package:sister_united/SelfLoveDetails.dart';
 
@@ -227,7 +228,12 @@ class _SelfLoveState extends State<SelfLove> {
                                   itemBuilder: (c, i) {
                                     return InkWell(
                                       onTap: () {
-                                        Get.to(SelfLoveDetails());
+                                        Get.to(ChangeNotifierProvider(
+                                            create: (_) => AllDairyProvider(),
+                                            child: SelfLoveDetails(
+                                              fkDairyId:
+                                                  '${_provider.listOfAllSubCat[i]['name']}',
+                                            )));
                                       },
                                       child: Container(
                                         height: height / 10,
@@ -248,8 +254,10 @@ class _SelfLoveState extends State<SelfLove> {
                                               height: height / 25,
                                               width: width / 12.5,
                                               child: CachedNetworkImage(
-                                                imageUrl:
-                                                     '${_provider.listOfAllSubCat[i]['icon']}'.contains('https')?'${_provider.listOfAllSubCat[i]['icon']}':"http://via.placeholder.com/350x150",
+                                                imageUrl: '${_provider.listOfAllSubCat[i]['icon']}'
+                                                        .contains('https')
+                                                    ? '${_provider.listOfAllSubCat[i]['icon']}'
+                                                    : "http://via.placeholder.com/350x150",
                                                 placeholder: (context, url) =>
                                                     CircularProgressIndicator(),
                                                 errorWidget:

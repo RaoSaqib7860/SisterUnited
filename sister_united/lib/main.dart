@@ -1,15 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:sister_united/ApiUtils/AuthUtils.dart';
 import 'package:sister_united/ApiUtils/SharedPreference.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/Authentication/Login.dart';
 import 'package:sister_united/Providers/AuthProviders/LoginProvider.dart';
-import 'HomePage.dart';
-import 'Providers/AllProviders/HomePageProvider.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,9 +26,7 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
-
   final String title;
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
