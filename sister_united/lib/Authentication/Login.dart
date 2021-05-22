@@ -7,7 +7,6 @@ import 'package:sister_united/ApiUtils/AuthUtils.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/Authentication/ForgotPassword.dart';
 import 'package:sister_united/Authentication/SignUp.dart';
-import 'package:sister_united/HomePage.dart';
 import 'package:sister_united/Providers/AuthProviders/ForgotPasswordProvider.dart';
 import 'package:sister_united/Providers/AuthProviders/LoginProvider.dart';
 import 'package:sister_united/Providers/AuthProviders/SignUpProvider.dart';
@@ -232,8 +231,10 @@ class _LoginState extends State<Login> {
                               if (_provider.emailController.text.isNotEmpty) {
                                 if (_provider
                                     .passwordController.text.isNotEmpty) {
-                                   _provider.setloading(true);
-                                 AuthUtils.loginApi(provider: _provider,con: _controllerCenterRight);
+                                  _provider.setloading(true);
+                                  AuthUtils.loginApi(
+                                      provider: _provider,
+                                      con: _controllerCenterRight);
                                 } else {
                                   Get.snackbar(
                                       'Error', 'Please enter password');
@@ -346,6 +347,9 @@ class _LoginState extends State<Login> {
                       child: Container(
                         height: height,
                         width: width,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
                         decoration:
                             BoxDecoration(color: Colors.black.withOpacity(0.5)),
                       ),

@@ -4,14 +4,15 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:sister_united/ApiUtils/AllApiUtils.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
-import 'package:sister_united/ProfilePage.dart';
 import 'package:sister_united/Providers/AllProviders/HomePageProvider.dart';
 import 'package:sister_united/Providers/AllProviders/SubCatProvider.dart';
 import 'package:sister_united/SelfLove.dart';
 import 'package:sister_united/Sms/MainSms.dart';
 import 'Authentication/Login.dart';
+import 'DrawerHomePage.dart';
 
 class HomePage extends StatefulWidget {
+  static GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
   HomePage({Key key}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
@@ -33,6 +34,10 @@ class _HomePageState extends State<HomePage> {
 
     return SafeArea(
       child: Scaffold(
+        key: HomePage.scaffoldkey,
+        drawer: Drawer(
+          child: DrawerHomePage(),
+        ),
         backgroundColor: Colors.white,
         body: Stack(
           children: [
@@ -42,7 +47,7 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 children: [
                   SizedBox(
-                    height: height / 20,
+                    height: height / 30,
                   ),
                   Padding(
                     padding:
@@ -54,10 +59,11 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             InkWell(
                               onTap: () {
-                                Get.to(ProfilePage());
+                                // Get.to(ProfilePage());
+                                HomePage.scaffoldkey.currentState.openDrawer();
                               },
                               child: Icon(
-                                Icons.person,
+                                Icons.dehaze_rounded,
                                 color: Stheemes.darkPinck,
                                 size: 35,
                               ),
@@ -177,9 +183,11 @@ class _HomePageState extends State<HomePage> {
                                           Get.to(ChangeNotifierProvider(
                                             create: (_) => SubcatProvider(),
                                             child: SelfLove(
-                                              text: '${_provider.listAllCat[0]['name']}',
+                                              text:
+                                                  '${_provider.listAllCat[0]['name']}',
                                               id: '${_provider.listAllCat[0]['id']}',
-                                              subtext: '${_provider.listAllCat[0]['subHeading']}',
+                                              subtext:
+                                                  '${_provider.listAllCat[0]['subHeading']}',
                                             ),
                                           ));
                                         },
@@ -236,12 +244,14 @@ class _HomePageState extends State<HomePage> {
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                           Get.to(ChangeNotifierProvider(
+                                          Get.to(ChangeNotifierProvider(
                                             create: (_) => SubcatProvider(),
                                             child: SelfLove(
-                                              text: '${_provider.listAllCat[1]['name']}',
+                                              text:
+                                                  '${_provider.listAllCat[1]['name']}',
                                               id: '${_provider.listAllCat[1]['id']}',
-                                              subtext: '${_provider.listAllCat[1]['subHeading']}',
+                                              subtext:
+                                                  '${_provider.listAllCat[1]['subHeading']}',
                                             ),
                                           ));
                                         },
@@ -329,9 +339,11 @@ class _HomePageState extends State<HomePage> {
                                           Get.to(ChangeNotifierProvider(
                                             create: (_) => SubcatProvider(),
                                             child: SelfLove(
-                                              text: '${_provider.listAllCat[2]['name']}',
+                                              text:
+                                                  '${_provider.listAllCat[2]['name']}',
                                               id: '${_provider.listAllCat[2]['id']}',
-                                              subtext: '${_provider.listAllCat[2]['subHeading']}',
+                                              subtext:
+                                                  '${_provider.listAllCat[2]['subHeading']}',
                                             ),
                                           ));
                                         },
@@ -387,12 +399,14 @@ class _HomePageState extends State<HomePage> {
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                           Get.to(ChangeNotifierProvider(
+                                          Get.to(ChangeNotifierProvider(
                                             create: (_) => SubcatProvider(),
                                             child: SelfLove(
-                                              text: '${_provider.listAllCat[3]['name']}',
+                                              text:
+                                                  '${_provider.listAllCat[3]['name']}',
                                               id: '${_provider.listAllCat[3]['id']}',
-                                              subtext: '${_provider.listAllCat[3]['subHeading']}',
+                                              subtext:
+                                                  '${_provider.listAllCat[3]['subHeading']}',
                                             ),
                                           ));
                                         },

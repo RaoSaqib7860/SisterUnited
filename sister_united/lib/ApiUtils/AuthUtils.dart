@@ -14,7 +14,7 @@ import 'package:sister_united/Providers/AuthProviders/SignUpProvider.dart';
 
 class AuthUtils {
   static String token = '';
-  static const String baseUrl = 'http://135.125.212.109';
+  static const String baseUrl = 'https://sistersunited.azurewebsites.net';
   static const String signUp = '/api/Account/UserRegistraion';
   static const String login = '/api/Authentication/login';
   static const String forgotPassword = '/api/Account/ForgetPassword';

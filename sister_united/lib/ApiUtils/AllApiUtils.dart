@@ -6,7 +6,7 @@ import 'package:sister_united/Providers/AllProviders/HomePageProvider.dart';
 import 'package:sister_united/Providers/AllProviders/SubCatProvider.dart';
 
 class AllApiUtils {
-  static const String baseUrl = 'http://135.125.212.109';
+  static const String baseUrl = 'https://sistersunited.azurewebsites.net';
   static const String getAllCategory = '/api/Category/GetAll';
   static const String getAllSubCategory = '/api/SubCategory/GetAll';
   static const String getAllDairy = '/api/DairyPost/GetAll';
