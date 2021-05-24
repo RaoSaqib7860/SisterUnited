@@ -118,7 +118,7 @@ class _LoginState extends State<Login> {
                         children: [
                           InkWell(
                             onTap: () {
-                              Get.to(TermsAndCondition());
+                             // Get.to(TermsAndCondition());
                             },
                             child: Container(
                               margin: EdgeInsets.only(top: height / 6.5),

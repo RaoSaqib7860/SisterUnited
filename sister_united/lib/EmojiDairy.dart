@@ -7,7 +7,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
-import 'package:sister_united/WeightDairy.dart';
+import 'package:sister_united/CreateDairy.dart';
 
 class ImojiDairy extends StatefulWidget {
   ImojiDairy({Key key}) : super(key: key);
@@ -295,7 +295,7 @@ class _ImojiDairyState extends State<ImojiDairy> {
               child: FloatingActionButton(
                 child: Icon(Icons.forward),
                 onPressed: () {
-                  Get.to(WheightDairy());
+                 // Get.to(WheightDairy());
                 },
               ),
             )

@@ -5,23 +5,23 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:sister_united/ApiUtils/AllApiUtils.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
-import 'package:sister_united/Providers/AllProviders/AllDairyProvider.dart';
+import 'package:sister_united/Providers/AllProviders/AllPostProvider.dart';
 import 'package:sister_united/Providers/AllProviders/SubCatProvider.dart';
-import 'package:sister_united/SelfLoveDetails.dart';
+import 'AllPosts.dart';
+import 'DrawerHomePage.dart';
 
-class SelfLove extends StatefulWidget {
+class SubCategore extends StatefulWidget {
   final String id;
   final String text;
   final String subtext;
-  SelfLove({Key key, this.text = '', this.id, this.subtext}) : super(key: key);
-
+  SubCategore({Key key, this.text = '', this.id, this.subtext})
+      : super(key: key);
   @override
-  _SelfLoveState createState() => _SelfLoveState();
+  _SubCategoreState createState() => _SubCategoreState();
 }
 
-class _SelfLoveState extends State<SelfLove> {
+class _SubCategoreState extends State<SubCategore> {
   List list = ['a', 'b', 'c', 'a', 'b', 'c', 'a', 'b', 'c', 'a'];
-
   @override
   void initState() {
     final _provider = Provider.of<SubcatProvider>(context, listen: false);
@@ -33,6 +33,7 @@ class _SelfLoveState extends State<SelfLove> {
     AllApiUtils.apigetAllSubCategory(provider: provider, id: widget.id);
   }
 
+  GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     final _provider = Provider.of<SubcatProvider>(context);
@@ -41,6 +42,10 @@ class _SelfLoveState extends State<SelfLove> {
 
     return SafeArea(
       child: Scaffold(
+        key: scaffoldkey,
+        drawer: Drawer(
+          child: DrawerHomePage(),
+        ),
         backgroundColor: Stheemes.whitesolid,
         body: Container(
           height: height,
@@ -116,7 +121,7 @@ class _SelfLoveState extends State<SelfLove> {
                     Expanded(
                       child: CustomPaint(
                         size: Size(width / 5, height / 10),
-                        painter: SelfLove1Painter(),
+                        painter: SubCategore1Painter(),
                       ),
                     )
                   ],
@@ -129,7 +134,7 @@ class _SelfLoveState extends State<SelfLove> {
                   width: width / 1.8,
                   child: CustomPaint(
                     size: Size(width / 5, height / 10),
-                    painter: SelfLove2Painter(),
+                    painter: SubCategore2Painter(),
                   ),
                 ),
               ),
@@ -140,7 +145,7 @@ class _SelfLoveState extends State<SelfLove> {
                   width: width / 1.8,
                   child: CustomPaint(
                     size: Size(width / 5, height / 10),
-                    painter: SelfLove3Painter(),
+                    painter: SubCategore3Painter(),
                   ),
                 ),
               ),
@@ -156,7 +161,16 @@ class _SelfLoveState extends State<SelfLove> {
                       children: [
                         Container(
                           padding: EdgeInsets.only(left: width / 100),
-                          child: Image.asset('assets/arrowBack.png'),
+                          child: InkWell(
+                            onTap: () {
+                              scaffoldkey.currentState.openDrawer();
+                            },
+                            child: Icon(
+                              Icons.dehaze_rounded,
+                              color: Colors.white,
+                              size: 35,
+                            ),
+                          ),
                         ),
                         Expanded(
                           child: RoundedTextFields(
@@ -174,7 +188,7 @@ class _SelfLoveState extends State<SelfLove> {
                       height: height / 60,
                     ),
                     Container(
-                      height: height / 3,
+                      height: height / 3.5,
                       width: width,
                       padding:
                           EdgeInsets.only(left: width / 20, right: width / 20),
@@ -218,80 +232,88 @@ class _SelfLoveState extends State<SelfLove> {
                       ),
                     ),
                     Expanded(
-                        child: _provider.listOfAllSubCat.isEmpty
+                        child: _provider.listOfAllSubCat.contains(1)
                             ? Center(
                                 child: CircularProgressIndicator(),
                               )
-                            : Container(
-                                margin: EdgeInsets.only(top: height / 100),
-                                child: ListView.builder(
-                                  itemBuilder: (c, i) {
-                                    return InkWell(
-                                      onTap: () {
-                                        Get.to(ChangeNotifierProvider(
-                                            create: (_) => AllDairyProvider(),
-                                            child: SelfLoveDetails(
-                                              fkDairyId:
+                            : _provider.listOfAllSubCat.isEmpty
+                                ? Center(
+                                    child: Text('Empty'),
+                                  )
+                                : Container(
+                                    margin: EdgeInsets.only(top: height / 100),
+                                    child: ListView.builder(
+                                      itemBuilder: (c, i) {
+                                        return InkWell(
+                                          onTap: () {
+                                            Get.to(ChangeNotifierProvider(
+                                                create: (_) =>
+                                                    AllPostProvider(),
+                                                child: AllPosts(
+                                                  subCatId:
+                                                      '${_provider.listOfAllSubCat[i]['id']}',
+                                                )));
+                                          },
+                                          child: Container(
+                                            height: height / 10,
+                                            width: width,
+                                            child: Row(
+                                              children: [
+                                                Text(
                                                   '${_provider.listOfAllSubCat[i]['name']}',
-                                            )));
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                                SizedBox(
+                                                  width: width / 30,
+                                                ),
+                                                Container(
+                                                  height: height / 25,
+                                                  width: width / 12.5,
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: '${_provider.listOfAllSubCat[i]['icon']}'
+                                                            .contains('https')
+                                                        ? '${_provider.listOfAllSubCat[i]['icon']}'
+                                                        : "http://via.placeholder.com/350x150",
+                                                    placeholder: (context,
+                                                            url) =>
+                                                        CircularProgressIndicator(),
+                                                    errorWidget:
+                                                        (context, url, error) =>
+                                                            Icon(Icons.error),
+                                                  ),
+                                                )
+                                              ],
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                            ),
+                                            margin: EdgeInsets.only(
+                                                left: width / 5,
+                                                right: width / 15,
+                                                bottom: height / 80),
+                                            decoration: BoxDecoration(
+                                                color: list[i] == 'a'
+                                                    ? Stheemes.pinck
+                                                    : list[i] == 'b'
+                                                        ? Stheemes.yellow
+                                                        : Stheemes.skyblue,
+                                                border: Border.all(
+                                                    width: 0.5,
+                                                    color: Colors.black),
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                          ),
+                                        );
                                       },
-                                      child: Container(
-                                        height: height / 10,
-                                        width: width,
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              '${_provider.listOfAllSubCat[i]['name']}',
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                            SizedBox(
-                                              width: width / 30,
-                                            ),
-                                            Container(
-                                              height: height / 25,
-                                              width: width / 12.5,
-                                              child: CachedNetworkImage(
-                                                imageUrl: '${_provider.listOfAllSubCat[i]['icon']}'
-                                                        .contains('https')
-                                                    ? '${_provider.listOfAllSubCat[i]['icon']}'
-                                                    : "http://via.placeholder.com/350x150",
-                                                placeholder: (context, url) =>
-                                                    CircularProgressIndicator(),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        Icon(Icons.error),
-                                              ),
-                                            )
-                                          ],
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                        ),
-                                        margin: EdgeInsets.only(
-                                            left: width / 5,
-                                            right: width / 15,
-                                            bottom: height / 80),
-                                        decoration: BoxDecoration(
-                                            color: list[i] == 'a'
-                                                ? Stheemes.pinck
-                                                : list[i] == 'b'
-                                                    ? Stheemes.yellow
-                                                    : Stheemes.skyblue,
-                                            border: Border.all(
-                                                width: 0.5,
-                                                color: Colors.black),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                      ),
-                                    );
-                                  },
-                                  itemCount: _provider.listOfAllSubCat.length,
-                                ),
-                              ))
+                                      itemCount:
+                                          _provider.listOfAllSubCat.length,
+                                    ),
+                                  ))
                   ],
                   crossAxisAlignment: CrossAxisAlignment.start,
                 ),
@@ -387,7 +409,7 @@ class _RoundedTextFieldsState extends State<RoundedTextFields> {
   }
 }
 
-class SelfLove3Painter extends CustomPainter {
+class SubCategore3Painter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint_0 = new Paint()
@@ -421,7 +443,7 @@ class SelfLove3Painter extends CustomPainter {
   }
 }
 
-class SelfLove1Painter extends CustomPainter {
+class SubCategore1Painter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint_0 = new Paint()
@@ -447,7 +469,7 @@ class SelfLove1Painter extends CustomPainter {
   }
 }
 
-class SelfLove2Painter extends CustomPainter {
+class SubCategore2Painter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint_0 = new Paint()

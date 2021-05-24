@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/Help/HelpResources/LifeLineHelpLine.dart';
 import 'package:sister_united/Help/HelpResources/LowDownHelpline.dart';
@@ -11,6 +12,8 @@ import 'package:sister_united/Help/HelpResources/SocideHelpLine.dart';
 import 'package:sister_united/Help/HelpResources/WhatsUpHelpline.dart';
 import 'package:sister_united/Help/HelpResources/XsparkHelpLine.dart';
 import 'package:sister_united/Help/HelpResources/YouthHelpLineWithoutCompany.dart';
+import 'package:sister_united/Providers/AllProviders/SuicideHelpLineProvider.dart';
+import 'package:sister_united/Providers/AllProviders/YouthHelpLineProvider.dart';
 import '../DrawerHomePage.dart';
 import 'Components/HeaderContainer.dart';
 import 'Components/HelperButton.dart';
@@ -169,7 +172,10 @@ class _HelpMainState extends State<HelpMain> {
                   HelperButton(
                     text: 'SUICIDE HELP LINES',
                     onpressed: () {
-                      Get.to(SocideHelpLine());
+                      Get.to(ChangeNotifierProvider(
+                        child: SocideHelpLine(),
+                        create: (_) => SuicideHelpLineProvider(),
+                      ));
                     },
                   ),
                   SizedBox(
@@ -178,7 +184,10 @@ class _HelpMainState extends State<HelpMain> {
                   HelperButton(
                     text: 'YOUTH HELP LINES',
                     onpressed: () {
-                      Get.to(YouthHelpLineWithOutCompany());
+                      Get.to(ChangeNotifierProvider(
+                        child: YouthHelpLineWithOutCompany(),
+                        create: (_) => YouthHelpLineProvider(),
+                      ));
                     },
                   ),
                 ],

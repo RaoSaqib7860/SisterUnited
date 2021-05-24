@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/Help/Components/HeaderContainer.dart';
+import 'package:sister_united/Help/Components/HelpMethods.dart';
 import 'package:sister_united/Help/Components/HelperButton.dart';
 
 import '../../DrawerHomePage.dart';
@@ -81,10 +82,12 @@ class _LifelineHelpLineState extends State<LifelineHelpLine> {
                   padding: EdgeInsets.symmetric(
                     horizontal: width / 15,
                   ),
-                  child: Text(
-                    'Free Call: 0800 54 33 54 ',
-                    style: TextStyle(
-                      fontSize: 15,
+                  child: InkWell(
+                    onTap: () {},
+                    child: Text(
+                      'Free Call: 0800 54 33 54 ',
+                      style: TextStyle(
+                          fontSize: 15, decoration: TextDecoration.underline),
                     ),
                   ),
                 ),
@@ -95,23 +98,32 @@ class _LifelineHelpLineState extends State<LifelineHelpLine> {
                   padding: EdgeInsets.symmetric(
                     horizontal: width / 15,
                   ),
-                  child: Text(
-                    'Free Text: 4357',
-                    style: TextStyle(
-                      fontSize: 15,
+                  child: InkWell(
+                    onTap: () {
+                      sendSMStoHelpLine('', ['4357']);
+                    },
+                    child: Text(
+                      'Free Text: 4357',
+                      style: TextStyle(
+                          fontSize: 15, decoration: TextDecoration.underline),
                     ),
                   ),
-                ),SizedBox(
+                ),
+                SizedBox(
                   height: height / 40,
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: width / 15,
                   ),
-                  child: Text(
-                    'Website: https://outline.org.nz',
-                    style: TextStyle(
-                      fontSize: 15,
+                  child: InkWell(
+                    onTap: () {
+                      redirectToPage(number: 'https://outline.org.nz');
+                    },
+                    child: Text(
+                      'Website: https://outline.org.nz',
+                      style: TextStyle(
+                          fontSize: 15, decoration: TextDecoration.underline),
                     ),
                   ),
                 ),
@@ -120,7 +132,10 @@ class _LifelineHelpLineState extends State<LifelineHelpLine> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       HelperButton(
-                        text: 'Call Now',
+                        onpressed: () {
+                          sendSMStoHelpLine('', ['4357']);
+                        },
+                        text: 'Text Now',
                       ),
                       SizedBox(
                         height: height / 20,

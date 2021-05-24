@@ -2,12 +2,16 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:sister_united/AllDairyByUserId.dart';
 import 'package:sister_united/ApiUtils/AllApiUtils.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
+import 'package:sister_united/CreateDairy.dart';
+import 'package:sister_united/Providers/AllProviders/AllDairyByUserIdProvider.dart';
+import 'package:sister_united/Providers/AllProviders/CreateDairyProvider.dart';
 import 'package:sister_united/Providers/AllProviders/HomePageProvider.dart';
 import 'package:sister_united/Providers/AllProviders/SubCatProvider.dart';
-import 'package:sister_united/SelfLove.dart';
 import 'package:sister_united/Sms/MainSms.dart';
+import 'package:sister_united/SubCategore.dart';
 import 'Authentication/Login.dart';
 import 'DrawerHomePage.dart';
 
@@ -31,7 +35,6 @@ class _HomePageState extends State<HomePage> {
     final _provider = Provider.of<HomePageProvider>(context);
     var height = Get.height;
     var width = Get.width;
-
     return SafeArea(
       child: Scaffold(
         key: HomePage.scaffoldkey,
@@ -182,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                                         onTap: () {
                                           Get.to(ChangeNotifierProvider(
                                             create: (_) => SubcatProvider(),
-                                            child: SelfLove(
+                                            child: SubCategore(
                                               text:
                                                   '${_provider.listAllCat[0]['name']}',
                                               id: '${_provider.listAllCat[0]['id']}',
@@ -246,7 +249,7 @@ class _HomePageState extends State<HomePage> {
                                         onTap: () {
                                           Get.to(ChangeNotifierProvider(
                                             create: (_) => SubcatProvider(),
-                                            child: SelfLove(
+                                            child: SubCategore(
                                               text:
                                                   '${_provider.listAllCat[1]['name']}',
                                               id: '${_provider.listAllCat[1]['id']}',
@@ -338,7 +341,7 @@ class _HomePageState extends State<HomePage> {
                                         onTap: () {
                                           Get.to(ChangeNotifierProvider(
                                             create: (_) => SubcatProvider(),
-                                            child: SelfLove(
+                                            child: SubCategore(
                                               text:
                                                   '${_provider.listAllCat[2]['name']}',
                                               id: '${_provider.listAllCat[2]['id']}',
@@ -401,7 +404,7 @@ class _HomePageState extends State<HomePage> {
                                         onTap: () {
                                           Get.to(ChangeNotifierProvider(
                                             create: (_) => SubcatProvider(),
-                                            child: SelfLove(
+                                            child: SubCategore(
                                               text:
                                                   '${_provider.listAllCat[3]['name']}',
                                               id: '${_provider.listAllCat[3]['id']}',
@@ -494,20 +497,28 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Align(
                           alignment: Alignment.bottomLeft,
-                          child: Container(
-                            height: height / 10,
-                            width: width / 5,
-                            child: Center(
-                                child: Icon(
-                              Icons.book_outlined,
-                              color: Colors.black,
-                              size: 45,
-                            )),
-                            margin: EdgeInsets.only(
-                                left: width / 10, bottom: height / 35),
-                            decoration: BoxDecoration(
-                                color: Stheemes.darkPinck,
-                                shape: BoxShape.circle),
+                          child: InkWell(
+                            onTap: () {
+                              Get.to(ChangeNotifierProvider(
+                                child: AllDairyByUserID(),
+                                create: (_) => AllDairyByUserIDProvider(),
+                              ));
+                            },
+                            child: Container(
+                              height: height / 10,
+                              width: width / 5,
+                              child: Center(
+                                  child: Icon(
+                                Icons.book_outlined,
+                                color: Colors.black,
+                                size: 45,
+                              )),
+                              margin: EdgeInsets.only(
+                                  left: width / 10, bottom: height / 35),
+                              decoration: BoxDecoration(
+                                  color: Stheemes.darkPinck,
+                                  shape: BoxShape.circle),
+                            ),
                           ),
                         ),
                         Align(

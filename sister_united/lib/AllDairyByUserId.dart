@@ -2,44 +2,47 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:sister_united/AddnewPost.dart';
 import 'package:sister_united/ApiUtils/AllApiUtils.dart';
-import 'package:sister_united/AppStyle.dart/Sthemes.dart';
-import 'package:sister_united/MessageToTeam.dart';
-import 'package:sister_united/Providers/AllProviders/AllDairyProvider.dart';
-import 'package:sister_united/Providers/AllProviders/WeightDairyProvider.dart';
-import 'package:sister_united/SelfLoverSubDetails.dart';
-import 'package:sister_united/WeightDairy.dart';
+import 'package:sister_united/CreateDairy.dart';
+import 'package:sister_united/Providers/AllProviders/AllDairyByUserIdProvider.dart';
+import 'AppStyle.dart/Sthemes.dart';
+import 'DrawerHomePage.dart';
+import 'MessageToTeam.dart';
+import 'Providers/AllProviders/CreateDairyProvider.dart';
 
-class SelfLoveDetails extends StatefulWidget {
-  final String fkDairyId;
-  SelfLoveDetails({Key key, this.fkDairyId = ''}) : super(key: key);
+class AllDairyByUserID extends StatefulWidget {
+  AllDairyByUserID({Key key}) : super(key: key);
 
   @override
-  _SelfLoveDetailsState createState() => _SelfLoveDetailsState();
+  _AllDairyByUserIDState createState() => _AllDairyByUserIDState();
 }
 
-class _SelfLoveDetailsState extends State<SelfLoveDetails> {
-  List list = ['a', 'b', 'c', 'a', 'b', 'c', 'a', 'b', 'c', 'a'];
+class _AllDairyByUserIDState extends State<AllDairyByUserID> {
+  GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
-    final _provider = Provider.of<AllDairyProvider>(context, listen: false);
-    getApiData(_provider);
+    final _provider =
+        Provider.of<AllDairyByUserIDProvider>(context, listen: false);
+    getapiData(_provider);
     super.initState();
   }
 
-  getApiData(AllDairyProvider provider) {
-    AllApiUtils.apigetAllDairy(provider: provider);
+  getapiData(AllDairyByUserIDProvider provider) async {
+    AllApiUtils.apiallDairyData(provider);
   }
 
   @override
   Widget build(BuildContext context) {
     var height = Get.height;
     var width = Get.width;
-    final _provider = Provider.of<AllDairyProvider>(context);
+    final _provider = Provider.of<AllDairyByUserIDProvider>(context);
     return SafeArea(
       child: Scaffold(
+        key: scaffoldkey,
+        drawer: Drawer(
+          child: DrawerHomePage(),
+        ),
         backgroundColor: Stheemes.whitesolid,
         body: Container(
           height: height,
@@ -159,7 +162,16 @@ class _SelfLoveDetailsState extends State<SelfLoveDetails> {
                       children: [
                         Container(
                           padding: EdgeInsets.only(left: width / 100),
-                          child: Image.asset('assets/arrowBack.png'),
+                          child: InkWell(
+                            onTap: () {
+                              scaffoldkey.currentState.openDrawer();
+                            },
+                            child: Icon(
+                              Icons.dehaze_rounded,
+                              color: Colors.white,
+                              size: 35,
+                            ),
+                          ),
                         ),
                         Expanded(
                           child: RoundedTextFields(
@@ -177,11 +189,11 @@ class _SelfLoveDetailsState extends State<SelfLoveDetails> {
                       height: height / 40,
                     ),
                     Expanded(
-                        child: _provider.loading == false
+                        child: _provider.listOfAllPDairy.contains(1)
                             ? Center(
                                 child: CircularProgressIndicator(),
                               )
-                            : _provider.listOfAllDairy.isEmpty
+                            : _provider.listOfAllPDairy.isEmpty
                                 ? Center(
                                     child: Text('Empty'),
                                   )
@@ -189,7 +201,7 @@ class _SelfLoveDetailsState extends State<SelfLoveDetails> {
                                     itemBuilder: (c, i) {
                                       return InkWell(
                                         onTap: () {
-                                          Get.to(SelfLoverSubDetails());
+                                          // Get.to(SelfLoverSubDetails());
                                         },
                                         child: Container(
                                           height: height / 3.2,
@@ -220,7 +232,8 @@ class _SelfLoveDetailsState extends State<SelfLoveDetails> {
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      '${_provider.listOfAllDairy[i]['title']}',
+                                                      //'${_provider.listOfAllPDairy[i]['title']}',
+                                                      'wait',
                                                       style: TextStyle(
                                                           fontSize: 14),
                                                     ),
@@ -303,8 +316,11 @@ class _SelfLoveDetailsState extends State<SelfLoveDetails> {
                                         ),
                                       );
                                     },
-                                    itemCount: _provider.listOfAllDairy.length,
-                                  ))
+                                    itemCount: _provider.listOfAllPDairy.length,
+                                  )),
+                    SizedBox(
+                      height: height / 10,
+                    ),
                   ],
                   crossAxisAlignment: CrossAxisAlignment.start,
                 ),
@@ -328,7 +344,10 @@ class _SelfLoveDetailsState extends State<SelfLoveDetails> {
                     children: [
                       InkWell(
                         onTap: () {
-                          Get.to(AddNewPost());
+                          Get.to(ChangeNotifierProvider(
+                            child: CreateDairy(),
+                            create: (_) => CreateDairyProvider(),
+                          ));
                         },
                         child: Container(
                           height: height / 15,
@@ -348,11 +367,11 @@ class _SelfLoveDetailsState extends State<SelfLoveDetails> {
                               width: width / 5,
                               child: InkWell(
                                 onTap: () {
-                                  Get.to(ChangeNotifierProvider(
-                                      create: (_) => WeightDairyProvider(),
-                                      child: WheightDairy(
-                                        fkDairyId: widget.fkDairyId,
-                                      )));
+                                  // Get.to(ChangeNotifierProvider(
+                                  //     create: (_) => WeightDairyProvider(),
+                                  //     child: WheightDairy(
+                                  //       fkDairyId: widget.fkDairyId,
+                                  //     )));
                                 },
                                 child: Center(
                                     child: Icon(
@@ -472,7 +491,7 @@ class _RoundedTextFieldsState extends State<RoundedTextFields> {
   }
 }
 
-class SelfLoveDetails3Painter extends CustomPainter {
+class AllPosts3Painter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint_0 = new Paint()
@@ -506,7 +525,7 @@ class SelfLoveDetails3Painter extends CustomPainter {
   }
 }
 
-class SelfLoveDetails1Painter extends CustomPainter {
+class AllPosts1Painter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint_0 = new Paint()
@@ -532,7 +551,7 @@ class SelfLoveDetails1Painter extends CustomPainter {
   }
 }
 
-class SelfLoveDetails2Painter extends CustomPainter {
+class AllPosts2Painter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint_0 = new Paint()

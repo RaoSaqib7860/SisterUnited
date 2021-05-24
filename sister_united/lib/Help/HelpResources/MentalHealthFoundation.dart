@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/Help/Components/HeaderContainer.dart';
+import 'package:sister_united/Help/Components/HelpMethods.dart';
 import 'package:sister_united/Help/Components/HelperButton.dart';
 
 import '../../DrawerHomePage.dart';
@@ -81,10 +82,14 @@ class _MentolhealthFoundationState extends State<MentolhealthFoundation> {
                   padding: EdgeInsets.symmetric(
                     horizontal: width / 15,
                   ),
-                  child: Text(
-                    'Free Text: 1737',
-                    style: TextStyle(
-                      fontSize: 15,
+                  child: InkWell(
+                    onTap: () {
+                      sendSMStoHelpLine('', ['234']);
+                    },
+                    child: Text(
+                      'Free Text: 1737',
+                      style: TextStyle(
+                          fontSize: 15, decoration: TextDecoration.underline),
                     ),
                   ),
                 ),
@@ -95,10 +100,14 @@ class _MentolhealthFoundationState extends State<MentolhealthFoundation> {
                   padding: EdgeInsets.symmetric(
                     horizontal: width / 15,
                   ),
-                  child: Text(
-                    'Website: https://mentalhealth.org.nz',
-                    style: TextStyle(
-                      fontSize: 15,
+                  child: InkWell(
+                    onTap: () {
+                      redirectToPage(number: 'https://mentalhealth.org.nz');
+                    },
+                    child: Text(
+                      'Website: https://mentalhealth.org.nz',
+                      style: TextStyle(
+                          fontSize: 15, decoration: TextDecoration.underline),
                     ),
                   ),
                 ),
@@ -107,6 +116,9 @@ class _MentolhealthFoundationState extends State<MentolhealthFoundation> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       HelperButton(
+                        onpressed: () {
+                          sendSMStoHelpLine('', ['1737']);
+                        },
                         text: 'Text Now',
                       ),
                       SizedBox(

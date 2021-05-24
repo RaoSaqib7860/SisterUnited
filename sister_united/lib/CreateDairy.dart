@@ -7,20 +7,21 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
-import 'package:sister_united/EmojiDairy.dart';
-import 'package:sister_united/Providers/AllProviders/WeightDairyProvider.dart';
+import 'package:sister_united/ApiUtils/AllApiUtils.dart';
+import 'package:sister_united/Providers/AllProviders/CreateDairyProvider.dart';
 import 'AddnewPost.dart';
 import 'AppStyle.dart/Sthemes.dart';
+import 'DrawerHomePage.dart';
 
-class WheightDairy extends StatefulWidget {
+class CreateDairy extends StatefulWidget {
   final String fkDairyId;
-  WheightDairy({Key key, this.fkDairyId}) : super(key: key);
+  CreateDairy({Key key, this.fkDairyId}) : super(key: key);
 
   @override
-  _WheightDairyState createState() => _WheightDairyState();
+  _CreateDairyState createState() => _CreateDairyState();
 }
 
-class _WheightDairyState extends State<WheightDairy> {
+class _CreateDairyState extends State<CreateDairy> {
   DateFormat dateFormat = new DateFormat.Hms();
   DateTime dateTime = DateTime.now();
   List listofDateinNuber = [];
@@ -50,13 +51,18 @@ class _WheightDairyState extends State<WheightDairy> {
     super.initState();
   }
 
+  GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     var height = Get.height;
     var width = Get.width;
-    final _provider = Provider.of<WeightDairyProvider>(context);
+    final _provider = Provider.of<CreateDairyProvider>(context);
     return SafeArea(
       child: Scaffold(
+        key: scaffoldkey,
+        drawer: Drawer(
+          child: DrawerHomePage(),
+        ),
         backgroundColor: Stheemes.yellow,
         body: Stack(
           children: [
@@ -64,6 +70,8 @@ class _WheightDairyState extends State<WheightDairy> {
               height: height,
               width: width,
               child: ListView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
                 children: [
                   SizedBox(
                     height: height / 22,
@@ -101,21 +109,34 @@ class _WheightDairyState extends State<WheightDairy> {
                     ],
                     mainAxisAlignment: MainAxisAlignment.end,
                   ),
-                  SizedBox(
-                    height: height / 50,
+                  InkWell(
+                    onTap: () {
+                      scaffoldkey.currentState.openDrawer();
+                    },
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: width / 20),
+                        child: Icon(
+                          Icons.dehaze_rounded,
+                          color: Colors.white,
+                          size: 35,
+                        ),
+                      ),
+                    ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: width / 10),
+                    padding: EdgeInsets.only(left: width / 12),
                     child: Text(
                       'Dear Diary',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                   SizedBox(
-                    height: height / 35,
+                    height: height / 40,
                   ),
                   Container(
                     height: height / 6,
@@ -153,7 +174,11 @@ class _WheightDairyState extends State<WheightDairy> {
                                 print('change $date in time zone ' +
                                     date.timeZoneOffset.inHours.toString());
                               }, onConfirm: (date) {
-                                print('confirm $date');
+                                DateTime dt = DateTime.now();
+                                String sDate =
+                                    date.toString().split(' ')[0].toString();
+                                _provider.setTimeZone(
+                                    '${sDate}T${dt.toUtc().toString().split(' ')[1].toString()}');
                               },
                                   currentTime: DateTime.now(),
                                   locale: LocaleType.en);
@@ -173,6 +198,13 @@ class _WheightDairyState extends State<WheightDairy> {
                               return InkWell(
                                 onTap: () {
                                   if (listofDateBool[i] == false) {
+                                    for (var m = 0;
+                                        m < listofDateBool.length;
+                                        m++) {
+                                      setState(() {
+                                        listofDateBool[m] = false;
+                                      });
+                                    }
                                     setState(() {
                                       listofDateBool[i] = true;
                                     });
@@ -458,7 +490,34 @@ class _WheightDairyState extends State<WheightDairy> {
                         InkWell(
                           onTap: () {
                             if (_provider.selectedDate != '') {
-                             
+                              if (_provider.titleController.text.isNotEmpty) {
+                                if (_provider
+                                    .descriptionController.text.isNotEmpty) {
+                                  if (_provider.file != null) {
+                                    if (_provider
+                                        .notesController.text.isNotEmpty) {
+                                      if (_provider.timeZone != '') {
+                                        _provider.setloading(true);
+                                        AllApiUtils.apiCreateDairy(_provider);
+                                      } else {
+                                        Get.snackbar(
+                                            'Error', 'Please select time');
+                                      }
+                                    } else {
+                                      Get.snackbar(
+                                          'Error', 'Please enter notes');
+                                    }
+                                  } else {
+                                    Get.snackbar(
+                                        'Error', 'Please select image');
+                                  }
+                                } else {
+                                  Get.snackbar(
+                                      'Error', 'Please enter description');
+                                }
+                              } else {
+                                Get.snackbar('Error', 'Please enter title');
+                              }
                             } else {
                               Get.snackbar('Error', 'Please select date');
                             }
@@ -491,22 +550,34 @@ class _WheightDairyState extends State<WheightDairy> {
             ),
             Align(
               alignment: Alignment.topLeft,
-              child: Container(
-                margin: EdgeInsets.only(top: width / 15, left: width / 30),
-                height: height / 30,
-                width: width / 5,
-                child: Image.asset('assets/arrowBack.png'),
+              child: InkWell(
+                onTap: () {
+                  Get.back();
+                },
+                child: Container(
+                  margin: EdgeInsets.only(top: width / 15, left: width / 30),
+                  height: height / 30,
+                  width: width / 5,
+                  child: Image.asset('assets/arrowBack.png'),
+                ),
               ),
             ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: FloatingActionButton(
-                child: Icon(Icons.forward),
-                onPressed: () {
-                  Get.to(ImojiDairy());
-                },
-              ),
-            )
+            _provider.loading == true
+                ? InkWell(
+                    onTap: () {
+                      _provider.setloading(false);
+                    },
+                    child: Container(
+                      height: height,
+                      width: width,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      decoration:
+                          BoxDecoration(color: Colors.black.withOpacity(0.5)),
+                    ),
+                  )
+                : SizedBox()
           ],
         ),
       ),

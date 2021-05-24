@@ -1,10 +1,16 @@
+import 'dart:io';
 import 'package:animate_do/animate_do.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:sister_united/ApiUtils/AllApiUtils.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
+import 'package:sister_united/Providers/AllProviders/AddNewPostProvider.dart';
 
 class AddNewPost extends StatefulWidget {
-  AddNewPost({Key key}) : super(key: key);
+  final String subCatId;
+  AddNewPost({Key key, this.subCatId}) : super(key: key);
 
   @override
   _AddNewPostState createState() => _AddNewPostState();
@@ -15,7 +21,7 @@ class _AddNewPostState extends State<AddNewPost> {
   Widget build(BuildContext context) {
     var height = Get.height;
     var width = Get.width;
-
+    final _provider = Provider.of<AddnewPostProvider>(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Stheemes.whitesolid,
@@ -50,20 +56,42 @@ class _AddNewPostState extends State<AddNewPost> {
                   SizedBox(
                     height: height / 40,
                   ),
-                  Container(
-                    height: height / 4,
-                    width: width,
-                    child: Center(
-                        child: Icon(
-                      Icons.image,
-                      size: 150,
-                      color: Stheemes.offGreyColor,
-                    )),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(width: 0.5, color: Colors.black)),
-                    margin:
-                        EdgeInsets.only(left: width / 15, right: width / 15),
+                  InkWell(
+                    onTap: () async {
+                      FilePickerResult result =
+                          await FilePicker.platform.pickFiles(
+                        type: FileType.image,
+                        allowMultiple: false,
+                      );
+                      if (result != null) {
+                        _provider.setFile(File(result.files.single.path));
+                      } else {
+                        // User canceled the picker
+                      }
+                    },
+                    child: Container(
+                      height: height / 4,
+                      width: width,
+                      child: _provider.file != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(30),
+                              child: Image.file(
+                                File(_provider.file.path),
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : Center(
+                              child: Icon(
+                              Icons.image,
+                              size: 150,
+                              color: Stheemes.offGreyColor,
+                            )),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(width: 0.5, color: Colors.black)),
+                      margin:
+                          EdgeInsets.only(left: width / 15, right: width / 15),
+                    ),
                   ),
                   SizedBox(
                     height: height / 50,
@@ -82,6 +110,7 @@ class _AddNewPostState extends State<AddNewPost> {
                   AddPostFields(
                       color: Colors.white,
                       hint: 'Nationality'.tr,
+                      controller: _provider.titleCon,
                       postFixIcon: Icon(
                         Icons.flag,
                         color: Stheemes.offGreyColor,
@@ -104,6 +133,7 @@ class _AddNewPostState extends State<AddNewPost> {
                   AddPostFields(
                       color: Colors.white,
                       hint: 'Nationality'.tr,
+                      controller: _provider.descriptionCon,
                       line: 8,
                       postFixIcon: Icon(
                         Icons.flag,
@@ -113,35 +143,79 @@ class _AddNewPostState extends State<AddNewPost> {
                   SizedBox(
                     height: height / 25,
                   ),
-                  Container(
-                    height: height / 25,
-                    width: width,
-                    margin: EdgeInsets.only(left: width / 6, right: width / 6),
-                    child: Center(
-                      child: Text(
-                        'SUBMIT POST',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Stheemes.whitesolid,
-                            letterSpacing: 0.5),
+                  InkWell(
+                    onTap: () {
+                      if (_provider.titleCon.text.isNotEmpty) {
+                        if (_provider.descriptionCon.text.isNotEmpty) {
+                          if (_provider.file != null) {
+                            _provider.setloading(true);
+                            AllApiUtils.apiCreatePost(
+                                _provider, widget.subCatId);
+                          } else {
+                            Get.snackbar('Error', 'Please add Image',
+                                barBlur: 10.0);
+                          }
+                        } else {
+                          Get.snackbar('Error', 'Please add description',
+                              barBlur: 10.0);
+                        }
+                      } else {
+                        Get.snackbar('Error', 'Please add title',
+                            barBlur: 10.0);
+                      }
+                    },
+                    child: Container(
+                      height: height / 25,
+                      width: width,
+                      margin:
+                          EdgeInsets.only(left: width / 6, right: width / 6),
+                      child: Center(
+                        child: Text(
+                          'SUBMIT POST',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Stheemes.whitesolid,
+                              letterSpacing: 0.5),
+                        ),
                       ),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Stheemes.darkPinck),
                     ),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Stheemes.darkPinck),
                   )
                 ],
               ),
             ),
             Align(
               alignment: Alignment.topLeft,
-              child: Container(
-                margin: EdgeInsets.only(top: width / 15, left: width / 30),
-                height: height / 30,
-                width: width / 5,
-                child: Image.asset('assets/arrowBack.png'),
+              child: InkWell(
+                onTap: () {
+                  Get.back();
+                },
+                child: Container(
+                  margin: EdgeInsets.only(top: width / 15, left: width / 30),
+                  height: height / 30,
+                  width: width / 5,
+                  child: Image.asset('assets/arrowBack.png'),
+                ),
               ),
             ),
+            _provider.loading == true
+                ? InkWell(
+                    onTap: () {
+                      _provider.setloading(false);
+                    },
+                    child: Container(
+                      height: height,
+                      width: width,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      decoration:
+                          BoxDecoration(color: Colors.black.withOpacity(0.5)),
+                    ),
+                  )
+                : SizedBox()
           ],
         ),
       ),
@@ -188,7 +262,8 @@ class _AddPostFieldsState extends State<AddPostFields> {
       child: Padding(
         padding: EdgeInsets.only(left: Get.width / 15, right: Get.width / 15),
         child: Container(
-          decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(8)),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(8)),
           child: TextFormField(
             controller: widget.controller,
             obscureText: widget.obsucreTextUp,
@@ -197,28 +272,27 @@ class _AddPostFieldsState extends State<AddPostFields> {
             keyboardType: widget.isnumber == true ? TextInputType.number : null,
             style: TextStyle(color: Colors.black, fontSize: 14),
             decoration: InputDecoration(
-              disabledBorder: new OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: new BorderSide(
-                    color: Stheemes.offGreyColor,
-                  )),
-              focusedBorder: new OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: new BorderSide(
-                    color: Stheemes.offGreyColor,
-                  )),
-              enabledBorder: new OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: new BorderSide(
-                    color: Stheemes.offGreyColor,
-                  )),
-              border: new OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: new BorderSide(
-                    color: Stheemes.offGreyColor,
-                  )),
-              contentPadding: EdgeInsets.only(left: Get.width / 20),
-            ),
+                disabledBorder: new OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: new BorderSide(
+                      color: Stheemes.offGreyColor,
+                    )),
+                focusedBorder: new OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: new BorderSide(
+                      color: Stheemes.offGreyColor,
+                    )),
+                enabledBorder: new OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: new BorderSide(
+                      color: Stheemes.offGreyColor,
+                    )),
+                border: new OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: new BorderSide(
+                      color: Stheemes.offGreyColor,
+                    )),
+                contentPadding: EdgeInsets.all(Get.height / 50)),
           ),
         ),
       ),

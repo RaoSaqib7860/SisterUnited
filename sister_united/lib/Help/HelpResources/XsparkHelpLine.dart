@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/Help/Components/HeaderContainer.dart';
+import 'package:sister_united/Help/Components/HelpMethods.dart';
 import 'package:sister_united/Help/Components/HelperButton.dart';
 
 import '../../DrawerHomePage.dart';
@@ -81,10 +82,14 @@ class _XsparkHelpLineState extends State<XsparkHelpLine> {
                   padding: EdgeInsets.symmetric(
                     horizontal: width / 15,
                   ),
-                  child: Text(
-                    'Website: https://www.sparx.org.nz/home',
-                    style: TextStyle(
-                      fontSize: 15,
+                  child: InkWell(
+                    onTap: () {
+                      redirectToPage(number: 'https://www.sparx.org.nz/home');
+                    },
+                    child: Text(
+                      'Website: https://www.sparx.org.nz/home',
+                      style: TextStyle(
+                          fontSize: 15, decoration: TextDecoration.underline),
                     ),
                   ),
                 ),
@@ -93,6 +98,10 @@ class _XsparkHelpLineState extends State<XsparkHelpLine> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       HelperButton(
+                        onpressed: () {
+                          redirectToPage(
+                              number: 'https://www.sparx.org.nz/home');
+                        },
                         text: 'Visit Page',
                       ),
                       SizedBox(

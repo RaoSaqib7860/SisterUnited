@@ -4,6 +4,8 @@ import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/Help/HelpMain.dart';
 import 'package:sister_united/ProfilePage.dart';
 
+import 'Sms/MainSms.dart';
+
 class DrawerHomePage extends StatefulWidget {
   DrawerHomePage({Key key}) : super(key: key);
 
@@ -78,9 +80,19 @@ class _DrawerHomePageState extends State<DrawerHomePage> {
                   SizedBox(
                     height: height / 80,
                   ),
-                  Text(
-                    'Chat',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  InkWell(
+                    onTap: () {
+                      Get.to(MainSmsPage());
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          'Chat',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: height / 80,

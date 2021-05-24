@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/Help/Components/HeaderContainer.dart';
+import 'package:sister_united/Help/Components/HelpMethods.dart';
 import 'package:sister_united/Help/Components/HelperButton.dart';
 
 import '../../DrawerHomePage.dart';
@@ -81,10 +82,14 @@ class _LowDownHelpLineState extends State<LowDownHelpLine> {
                   padding: EdgeInsets.symmetric(
                     horizontal: width / 15,
                   ),
-                  child: Text(
-                    'Free Call: 0800 111 757',
-                    style: TextStyle(
-                      fontSize: 15,
+                  child: InkWell(
+                    onTap: () {
+                      makePhoneCall(number: '0800 111 757');
+                    },
+                    child: Text(
+                      'Free Call: 0800 111 757',
+                      style: TextStyle(
+                          fontSize: 15, decoration: TextDecoration.underline),
                     ),
                   ),
                 ),
@@ -95,10 +100,14 @@ class _LowDownHelpLineState extends State<LowDownHelpLine> {
                   padding: EdgeInsets.symmetric(
                     horizontal: width / 15,
                   ),
-                  child: Text(
-                    'Free Text: 5626',
-                    style: TextStyle(
-                      fontSize: 15,
+                  child: InkWell(
+                    onTap: () {
+                      sendSMStoHelpLine('', ['5626']);
+                    },
+                    child: Text(
+                      'Free Text: 5626',
+                      style: TextStyle(
+                          fontSize: 15, decoration: TextDecoration.underline),
                     ),
                   ),
                 ),
@@ -109,10 +118,14 @@ class _LowDownHelpLineState extends State<LowDownHelpLine> {
                   padding: EdgeInsets.symmetric(
                     horizontal: width / 15,
                   ),
-                  child: Text(
-                    'Website: https://thelowdown.co.nz',
-                    style: TextStyle(
-                      fontSize: 15,
+                  child: InkWell(
+                    onTap: () {
+                      redirectToPage(number: 'https://thelowdown.co.nz');
+                    },
+                    child: Text(
+                      'Website: https://thelowdown.co.nz',
+                      style: TextStyle(
+                          fontSize: 15, decoration: TextDecoration.underline),
                     ),
                   ),
                 ),
@@ -121,6 +134,9 @@ class _LowDownHelpLineState extends State<LowDownHelpLine> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       HelperButton(
+                        onpressed: () {
+                          makePhoneCall(number: '0800 111 757');
+                        },
                         text: 'Call Now',
                       ),
                       SizedBox(

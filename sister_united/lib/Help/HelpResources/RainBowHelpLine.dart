@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/Help/Components/HeaderContainer.dart';
+import 'package:sister_united/Help/Components/HelpMethods.dart';
 import 'package:sister_united/Help/Components/HelperButton.dart';
 import '../../DrawerHomePage.dart';
 
@@ -80,10 +81,14 @@ class _RainBowHelpLineState extends State<RainBowHelpLine> {
                   padding: EdgeInsets.symmetric(
                     horizontal: width / 15,
                   ),
-                  child: Text(
-                    'Contact Form: https://ry.org.nz/get-support',
-                    style: TextStyle(
-                      fontSize: 15,
+                  child: InkWell(
+                    onTap: () {
+                      redirectToPage(number: 'https://ry.org.nz/get-support');
+                    },
+                    child: Text(
+                      'Contact Form: https://ry.org.nz/get-support',
+                      style: TextStyle(
+                          fontSize: 15, decoration: TextDecoration.underline),
                     ),
                   ),
                 ),
@@ -94,10 +99,14 @@ class _RainBowHelpLineState extends State<RainBowHelpLine> {
                   padding: EdgeInsets.symmetric(
                     horizontal: width / 15,
                   ),
-                  child: Text(
-                    'Website: https://ry.org.nz',
-                    style: TextStyle(
-                      fontSize: 15,
+                  child: InkWell(
+                    onTap: () {
+                      redirectToPage(number: 'https://ry.org.nz');
+                    },
+                    child: Text(
+                      'Website: https://ry.org.nz',
+                      style: TextStyle(
+                          fontSize: 15, decoration: TextDecoration.underline),
                     ),
                   ),
                 ),
@@ -106,6 +115,10 @@ class _RainBowHelpLineState extends State<RainBowHelpLine> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       HelperButton(
+                        onpressed: () {
+                          redirectToPage(
+                              number: 'https://ry.org.nz/get-support');
+                        },
                         text: 'Contact Now',
                       ),
                       SizedBox(

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:sister_united/ApiUtils/SharedPreference.dart';
 import 'package:sister_united/Authentication/Login.dart';
 import 'package:sister_united/HomePage.dart';
+import 'package:sister_united/Providers/AllProviders/CreateDairyProvider.dart';
 import 'package:sister_united/Providers/AllProviders/HomePageProvider.dart';
 import 'package:sister_united/Providers/AuthProviders/ForgotPasswordProvider.dart';
 import 'package:sister_united/Providers/AuthProviders/LoginProvider.dart';
@@ -19,6 +20,7 @@ class AuthUtils {
   static const String login = '/api/Authentication/login';
   static const String forgotPassword = '/api/Account/ForgetPassword';
   static const String updatePassword = '/api/Account/UpdateForgetPassword';
+  static const String createDairy = '/api/Dairy/Create';
   static Future signUpAPi({SignUpProvider provider}) async {
     try {
       var responce = await Dio().post(
@@ -82,7 +84,8 @@ class AuthUtils {
     } catch (e) {}
   }
 
-  static Future loginApi({LoginProvider provider,ConfettiController con}) async {
+  static Future loginApi(
+      {LoginProvider provider, ConfettiController con}) async {
     //  var url = Uri.parse('$baseUrl$login');
     try {
       var responce = await Dio().post(
@@ -115,6 +118,7 @@ class AuthUtils {
         log('token is = $token');
         SharedPreferenceClass msmcd = SharedPreferenceClass();
         msmcd.addToken(token);
+        msmcd.addUserId('${data['payload']['id']}');
         Future.delayed(Duration(seconds: 3), () {
           Get.to(ChangeNotifierProvider(
             child: HomePage(),
@@ -188,6 +192,45 @@ class AuthUtils {
         Get.snackbar('Success', data['message'], barBlur: 10.0);
         provider.setispassword(true);
       }
+    } catch (e) {
+      log('${e.toString()}');
+    }
+  }
+
+  Future apicreateDairy(CreateDairyProvider provider) async {
+    try {
+      var responce = await Dio().post(
+        '$baseUrl$updatePassword',
+        data: {
+          "title": provider.titleController.text,
+          "descripition": provider.descriptionController.text,
+          "date": "2021-05-24T12:49:37.188Z",
+          "photo": "string",
+          "weight": "string",
+          "notes": "string",
+          "emojis": "string",
+          "fkUserId": "string"
+        },
+        options: Options(
+          followRedirects: false,
+          validateStatus: (status) {
+            return status <= 500;
+          },
+          contentType: Headers.jsonContentType,
+          extra: {'accept': '*/*'},
+          responseType: ResponseType.json,
+        ),
+      );
+      var data = responce.data;
+      // provider.setloading(false);
+      // log('data is = $data');
+      // print('status code is = ${responce.statusCode}');
+      // if (data['status'] == 'Fail') {
+      //   Get.snackbar('Error', data['message'], barBlur: 10.0);
+      // } else if (data['status'] == 'Success') {
+      //   Get.snackbar('Success', data['message'], barBlur: 10.0);
+      //   provider.setispassword(true);
+      // }
     } catch (e) {
       log('${e.toString()}');
     }

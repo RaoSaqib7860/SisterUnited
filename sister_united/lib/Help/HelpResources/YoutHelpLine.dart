@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/Help/Components/ArrowBack.dart';
 import 'package:sister_united/Help/Components/HeaderContainer.dart';
+import 'package:sister_united/Help/Components/HelpMethods.dart';
 import 'package:sister_united/Help/Components/HelperButton.dart';
 
 import '../../DrawerHomePage.dart';
@@ -77,10 +80,15 @@ class _YouthHelpLineState extends State<YouthHelpLine> {
                   padding: EdgeInsets.symmetric(
                     horizontal: width / 15,
                   ),
-                  child: Text(
-                    '24/7 Free Call: 0800 376 633',
-                    style: TextStyle(
-                      fontSize: 15,
+                  child: InkWell(
+                    onTap: () {
+                      makePhoneCall(number: '0800 376 633');
+                    },
+                    child: Text(
+                      '24/7 Free Call: 0800 376 633',
+                      style: TextStyle(
+                        fontSize: 15,
+                      ),
                     ),
                   ),
                 ),
@@ -91,10 +99,14 @@ class _YouthHelpLineState extends State<YouthHelpLine> {
                   padding: EdgeInsets.symmetric(
                     horizontal: width / 15,
                   ),
-                  child: Text(
-                    'Free Text: 234',
-                    style: TextStyle(
-                      fontSize: 15,
+                  child: InkWell(
+                    onTap: () {
+                      sendSMStoHelpLine('', ['234']);
+                    },
+                    child: Text(
+                      'Free Text: 234',
+                      style: TextStyle(
+                          fontSize: 15, decoration: TextDecoration.underline),
                     ),
                   ),
                 ),
@@ -105,10 +117,16 @@ class _YouthHelpLineState extends State<YouthHelpLine> {
                   padding: EdgeInsets.symmetric(
                     horizontal: width / 15,
                   ),
-                  child: Text(
-                    'Email: Talk@youthline.co.nz',
-                    style: TextStyle(
-                      fontSize: 15,
+                  child: InkWell(
+                    onTap: () {
+                      sendMail(number: 'Talk@youthline.co.nz');
+                    },
+                    child: Text(
+                      'Email: Talk@youthline.co.nz',
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontSize: 15,
+                      ),
                     ),
                   ),
                 ),
@@ -119,10 +137,16 @@ class _YouthHelpLineState extends State<YouthHelpLine> {
                   padding: EdgeInsets.symmetric(
                     horizontal: width / 15,
                   ),
-                  child: Text(
-                    'Website: Youthline.co.nz',
-                    style: TextStyle(
-                      fontSize: 15,
+                  child: InkWell(
+                    onTap: () {
+                     // redirectToPage(number: 'www.Youthline.co.nz');
+                    },
+                    child: Text(
+                      'Website: Youthline.co.nz',
+                      style: TextStyle(
+                        fontSize: 15,
+                        decoration: TextDecoration.underline
+                      ),
                     ),
                   ),
                 ),
@@ -131,6 +155,9 @@ class _YouthHelpLineState extends State<YouthHelpLine> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       HelperButton(
+                        onpressed: () {
+                          makePhoneCall(number: '0800 376 633');
+                        },
                         text: 'YOUTH HELP LINES',
                       ),
                       SizedBox(

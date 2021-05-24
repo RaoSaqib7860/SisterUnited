@@ -6,9 +6,6 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
-import 'package:sister_united/PlayVideo.dart';
-import 'package:sister_united/WeightDairy.dart';
-import 'package:video_player/video_player.dart';
 
 class PhotoDairy extends StatefulWidget {
   PhotoDairy({Key key}) : super(key: key);
@@ -307,7 +304,7 @@ class _PhotoDairyState extends State<PhotoDairy> {
               child: FloatingActionButton(
                 child: Icon(Icons.forward),
                 onPressed: () {
-                  Get.to(WheightDairy());
+                //  Get.to(WheightDairy());
                 },
               ),
             )

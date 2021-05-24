@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sister_united/ApiUtils/AllApiUtils.dart';
 import 'package:sister_united/AppStyle.dart/Sthemes.dart';
 import 'package:sister_united/Help/Components/ArrowBack.dart';
 import 'package:sister_united/Help/Components/HeaderContainer.dart';
 import 'package:sister_united/Help/Components/HelperButton.dart';
+import 'package:sister_united/Providers/AllProviders/SuicideHelpLineProvider.dart';
 
 import '../../DrawerHomePage.dart';
 
@@ -14,11 +17,24 @@ class SocideHelpLine extends StatefulWidget {
 }
 
 class _SocideHelpLineState extends State<SocideHelpLine> {
+  @override
+  void initState() {
+    final _provider =
+        Provider.of<SuicideHelpLineProvider>(context, listen: false);
+    getApiData(_provider);
+    super.initState();
+  }
+
+  getApiData(SuicideHelpLineProvider provider) {
+    AllApiUtils.apiSuicideHelpLine(provider);
+  }
+
   GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    final _provider = Provider.of<SuicideHelpLineProvider>(context);
     return SafeArea(
       child: Scaffold(
         key: scaffoldkey,
@@ -52,15 +68,18 @@ class _SocideHelpLineState extends State<SocideHelpLine> {
                   SizedBox(
                     height: height / 30,
                   ),
-                  HelperButton(
-                    text: '0800 543 354 (Lifeline)',
-                  ),
-                  SizedBox(
-                    height: height / 30,
-                  ),
-                  HelperButton(
-                    text: '0800 543 354 (Lifeline)',
-                  ),
+                  Expanded(
+                      child: ListView.builder(
+                    itemBuilder: (c, i) {
+                      return Container(
+                        margin: EdgeInsets.only(bottom: height / 40),
+                        child: HelperButton(
+                          text: '0800 543 354 (Lifeline)',
+                        ),
+                      );
+                    },
+                    itemCount: 10,
+                  ))
                 ],
               ),
             ))
